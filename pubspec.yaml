@@ -34,6 +34,8 @@ dependencies:
   hexcolor: ^2.0.5
   shared_preferences: ^2.0.11
   day_night_time_picker: ^1.0.5
+  flutter_local_notifications: ^9.2.0
+
 
   flutter:
     sdk: flutter

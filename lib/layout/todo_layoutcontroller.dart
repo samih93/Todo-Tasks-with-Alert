@@ -85,7 +85,7 @@ class TodoLayoutController extends GetxController {
           _donetaskMap.add(element);
         else if (element['status'] == "archive") _archivetaskMap.add(element);
       });
-      _newtaskMap.length != 0
+      _newtaskMap.length > 1
           ? _newtaskMap.sort((a, b) {
               return DateTime.parse(
                       a['date'].toString() + " " + a['time'].toString())
@@ -96,9 +96,10 @@ class TodoLayoutController extends GetxController {
       // print("N  " + _newtaskMap.length.toString());
       // print("D  " + _donetaskMap.length.toString());
       // print("A  " + _archivetaskMap.length.toString());
+    }).then((value) {
+      _isloading = false;
+      update();
     });
-    _isloading = false;
-    update();
   }
 
   void onchangeIndex(int index) {
