@@ -71,6 +71,7 @@ class TodoLayoutController extends GetxController {
 //     return await GetDataFromDatabase();
 //   }
 
+// NOTE on select date in time line
   void onchangeselectedate(selecteddate) {
     currentSelectedDate = selecteddate;
     update();
