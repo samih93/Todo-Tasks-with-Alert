@@ -2,10 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
-import 'package:todo_tasks_with_alert/shared/styles/colors.dart';
+import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 
 Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
       init: Get.find<TodoLayoutController>(),
+      // NOTE Dismissible to
       builder: (todocontroller) => Dismissible(
         key: Key(map['id']),
         onDismissed: (direction) {
@@ -19,7 +20,7 @@ Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
                 radius: 35,
                 child: Text(
                   "${map['time']}",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(
@@ -34,7 +35,7 @@ Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
                     Text(
                       "${map['title']}",
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: 10,
@@ -64,13 +65,19 @@ Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
                           todocontroller.updatestatusTask(
                               taskId: map["id"].toString(), status: "done");
                         },
-                        icon: Icon(Icons.check_box, color: defaultColor)),
+                        icon: Icon(Icons.check_box,
+                            color: Get.isDarkMode
+                                ? defaultDarkColor
+                                : defaultLightColor)),
                     IconButton(
                         onPressed: () {
                           todocontroller.updatestatusTask(
                               taskId: map["id"].toString(), status: "archive");
                         },
-                        icon: Icon(Icons.archive, color: defaultColor)),
+                        icon: Icon(Icons.archive,
+                            color: Get.isDarkMode
+                                ? defaultDarkColor
+                                : defaultLightColor)),
                   ],
                 ),
               ),
@@ -128,13 +135,15 @@ Widget defaultTextFormField(
         bool obscure = false,
         InputBorder? border,
         String? hinttext,
-        int? maxligne}) =>
+        int? maxligne,
+        bool readonly = false}) =>
     TextFormField(
         controller: controller,
         keyboardType: inputtype,
         onFieldSubmitted: onfieldsubmit,
         onTap: ontap,
         maxLines: maxligne ?? 1,
+        readOnly: readonly,
         obscureText: obscure,
         onChanged: onchange,
         style: TextStyle(

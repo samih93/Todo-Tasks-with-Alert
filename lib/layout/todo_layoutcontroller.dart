@@ -9,6 +9,7 @@ import 'package:todo_tasks_with_alert/modules/new_tasks/new_task_screen.dart';
 import 'package:todo_tasks_with_alert/shared/componets/constants.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/TodoDbHelper.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/cashhelper.dart';
+import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 import 'package:uuid/uuid.dart';
 
 class TodoLayoutController extends GetxController {
@@ -20,6 +21,8 @@ class TodoLayoutController extends GetxController {
   List<Map> get archivetaskMap => _archivetaskMap;
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
+
+  String currentSelectedDate = DateTime.now().toString().split(' ').first;
 
   final screens = [NewTaskScreen(), DoneTaskScreen(), ArchiveTaskScreen()];
   List<BottomNavigationBarItem> bottomItems = [
@@ -39,21 +42,17 @@ class TodoLayoutController extends GetxController {
 
   TodoDbHelper dbHelper = TodoDbHelper.db;
 
-  bool _isloading = true;
-  bool get isloading => _isloading;
+  var isloading = true.obs;
 
   DateFormat format = DateFormat("dd-MM-yyyy");
 
   @override
   void onInit() async {
-    super.onInit();
     await dbHelper.createDatabase();
-    getDatabasesPath().then((value) => print(value + "/todo.db"));
-    bool? isdarkcashedthem = CashHelper.getThem(key: "isdark");
-    if (isdarkcashedthem != null) {
-      isDarkMode.value = isdarkcashedthem;
-    }
-    getalltasks();
+    await getDatabasesPath().then((value) => print(value + "/todo.db"));
+    await getalltasks();
+    print(_newtaskMap.length);
+    super.onInit();
   }
 
 // Future<List<Map>> insertTaskToDatabase(
@@ -72,12 +71,28 @@ class TodoLayoutController extends GetxController {
 //     return await GetDataFromDatabase();
 //   }
 
-  getalltasks() async {
+  void onchangeselectedate(selecteddate) {
+    currentSelectedDate = selecteddate;
+    update();
+    getalltasks();
+  }
+
+//NOTE on change remind list
+  var selectedRemindItem = "5".obs;
+  onchangeremindlist(value) {
+    selectedRemindItem.value = value;
+  }
+
+  Future<void> getalltasks() async {
+    var currentDate = DateTime.now().toString().split(' ');
+    print(isloading.value);
     _newtaskMap = [];
     _donetaskMap = [];
     _archivetaskMap = [];
-    _isloading = true;
-    dbHelper.database.rawQuery('select * from tasks').then((value) {
+    isloading.value = true;
+    await dbHelper.database
+        .rawQuery("select * from tasks where date='${currentSelectedDate}'")
+        .then((value) {
       value.forEach((element) {
         if (element['status'] == "new")
           _newtaskMap.add(element);
@@ -97,7 +112,8 @@ class TodoLayoutController extends GetxController {
       // print("D  " + _donetaskMap.length.toString());
       // print("A  " + _archivetaskMap.length.toString());
     }).then((value) {
-      _isloading = false;
+      isloading.value = false;
+      print(isloading.value);
       update();
     });
   }
@@ -141,10 +157,20 @@ class TodoLayoutController extends GetxController {
   var isDarkMode = false.obs;
 
   void onchangeThem() {
-    isDarkMode.value = !isDarkMode.value;
-    CashHelper.setTheme(key: "isdark", value: isDarkMode.value).then((value) {
-      print("Theme is ${isDarkMode == true ? "black" : "white"}");
-    });
-    update();
+    // isDarkMode.value = !isDarkMode.value;
+    // CashHelper.setTheme(key: "isdark", value: isDarkMode.value).then((value) {
+    //   print("Theme is ${isDarkMode == true ? "black" : "white"}");
+    // });
+    // update();
+    //! using Get
+    if (Get.isDarkMode) {
+      Get.changeTheme(Themes.lightTheme);
+      print("light");
+      CashHelper.setTheme(key: "isdark", value: false);
+    } else {
+      Get.changeTheme(Themes.darkThem);
+      print("dark");
+      CashHelper.setTheme(key: "isdark", value: true);
+    }
   }
 }

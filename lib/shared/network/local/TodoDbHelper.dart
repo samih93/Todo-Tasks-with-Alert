@@ -13,7 +13,7 @@ class TodoDbHelper {
         print("database created");
         db
             .execute(
-                "Create Table tasks(id TEXT,title TEXT,date TEXT , time TEXT , status TEXT)")
+                "Create Table tasks(id TEXT,title TEXT,date TEXT , time TEXT , status TEXT , remind INTEGER)")
             .then((value) => print('table created'))
             .catchError((onError) => print(onError.toString()));
       },

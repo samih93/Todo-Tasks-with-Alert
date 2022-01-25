@@ -64,13 +64,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  day_night_time_picker:
+  date_picker_timeline:
     dependency: "direct main"
     description:
-      name: day_night_time_picker
+      name: date_picker_timeline
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.5"
+    version: "1.2.3"
   dbus:
     dependency: transitive
     description:
