@@ -21,7 +21,11 @@ class AddTaskScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: SingleChildScrollView(
+      body: _buildFromAddTask(context),
+    );
+  }
+
+  _buildFromAddTask(BuildContext context) => SingleChildScrollView(
         reverse: true,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -171,7 +175,5 @@ class AddTaskScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
+      );
 }
