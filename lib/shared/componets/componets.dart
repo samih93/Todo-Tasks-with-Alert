@@ -1,6 +1,7 @@
 //NOTE ----------Build Task Item -----------------------------
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 
@@ -12,77 +13,96 @@ Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
         onDismissed: (direction) {
           todocontroller.deleteTask(taskId: map['id'].toString());
         },
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 35,
-                child: Text(
-                  "${map['time']}",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: defaultLightColor,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "${map['title']}",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.date_range_rounded,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "${DateFormat.yMMMd().format(DateTime.parse(map['date'].toString().split(' ').first))}",
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.watch_later_outlined,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "${map['time']}",
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "${map['title']}",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "${map['date']}",
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          todocontroller.updatestatusTask(
-                              taskId: map["id"].toString(), status: "done");
-                        },
-                        icon: Icon(Icons.check_box,
-                            color: Get.isDarkMode
-                                ? defaultDarkColor
-                                : defaultLightColor)),
-                    IconButton(
-                        onPressed: () {
-                          todocontroller.updatestatusTask(
-                              taskId: map["id"].toString(), status: "archive");
-                        },
-                        icon: Icon(Icons.archive,
-                            color: Get.isDarkMode
-                                ? defaultDarkColor
-                                : defaultLightColor)),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+            // Expanded(
+            //   flex: 2,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     mainAxisSize: MainAxisSize.max,
+            //     children: [
+            //       IconButton(
+            //           onPressed: () {
+            //             todocontroller.updatestatusTask(
+            //                 taskId: map["id"].toString(), status: "done");
+            //           },
+            //           icon: Icon(Icons.check_box,
+            //               color: Get.isDarkMode
+            //                   ? defaultDarkColor
+            //                   : defaultLightColor)),
+            //       IconButton(
+            //           onPressed: () {
+            //             todocontroller.updatestatusTask(
+            //                 taskId: map["id"].toString(), status: "archive");
+            //           },
+            //           icon: Icon(Icons.archive,
+            //               color: Get.isDarkMode
+            //                   ? defaultDarkColor
+            //                   : defaultLightColor)),
+            //     ],
+            //   ),
+            // ),
+          ],
         ),
       ),
     );
@@ -108,10 +128,8 @@ Widget tasksBuilder({required List<Map> tasks, required String message}) =>
           )
         : ListView.separated(
             itemBuilder: (context, index) => buildTaskItem(tasks[index]),
-            separatorBuilder: (context, index) => Container(
-                  color: Colors.grey,
-                  width: double.infinity,
-                  height: 1,
+            separatorBuilder: (context, index) => SizedBox(
+                  height: 10,
                 ),
             itemCount: tasks.length);
 
@@ -157,3 +175,30 @@ Widget defaultTextFormField(
           border: border ?? OutlineInputBorder(),
         ),
         validator: onvalidate);
+
+//NOTE ----------default Button -----------------------------
+Widget defaultButton(
+        {double width = double.infinity,
+        Color background = Colors.blue,
+        VoidCallback? onpress,
+        required String text,
+        double radius = 0,
+        double height = 40,
+        bool? isUppercase}) =>
+    Container(
+      width: width,
+      child: MaterialButton(
+        height: height,
+        onPressed: onpress,
+        child: Text(
+          (isUppercase != null && isUppercase) ? text.toUpperCase() : text,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+        color: background,
+      ),
+    );

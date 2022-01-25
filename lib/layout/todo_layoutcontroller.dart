@@ -36,15 +36,10 @@ class TodoLayoutController extends GetxController {
   ];
 
   final appbar_title = ["New Tasks", "Done Tasks", "Archive Tasks"];
-  RxBool isOpenBottomSheet = false.obs;
-  Icon _favIcon = Icon(Icons.edit);
-  Icon get favIcon => _favIcon;
 
   TodoDbHelper dbHelper = TodoDbHelper.db;
 
   var isloading = true.obs;
-
-  DateFormat format = DateFormat("dd-MM-yyyy");
 
   @override
   void onInit() async {
@@ -85,7 +80,6 @@ class TodoLayoutController extends GetxController {
   }
 
   Future<void> getalltasks() async {
-    var currentDate = DateTime.now().toString().split(' ');
     print(isloading.value);
     _newtaskMap = [];
     _donetaskMap = [];
@@ -119,13 +113,9 @@ class TodoLayoutController extends GetxController {
     });
   }
 
+//NOTE on change index of bottom navigation
   void onchangeIndex(int index) {
     _currentIndex = index;
-    update();
-  }
-
-  void onchangefavIcon(Icon icon) {
-    _favIcon = icon;
     update();
   }
 
