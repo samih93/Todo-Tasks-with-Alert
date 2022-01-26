@@ -122,9 +122,9 @@ class TodoLayoutController extends GetxController {
 //  add task by model
   insertTaskByModel({required Task model}) async {
     var dbclient = await dbHelper.database;
-    var uuid = Uuid();
-    model.id = uuid.v1();
-    print(model.toJson());
+    // var uuid = Uuid();
+    // model.id = uuid.v1();
+    // print(model.toJson());
     await dbclient.insert(taskTable, model.toJson());
     getalltasks();
   }

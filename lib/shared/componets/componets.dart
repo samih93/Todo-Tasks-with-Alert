@@ -1,17 +1,18 @@
 //NOTE ----------Build Task Item -----------------------------
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 
-Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
+Widget buildTaskItem(Map task) => GetBuilder<TodoLayoutController>(
       init: Get.find<TodoLayoutController>(),
       // NOTE Dismissible to
-      builder: (todocontroller) => Dismissible(
-        key: Key(map['id']),
-        onDismissed: (direction) {
-          todocontroller.deleteTask(taskId: map['id'].toString());
+      builder: (todocontroller) => InkWell(
+        onTap: () {
+          print("On Tapped " + task['id'].toString());
+          //  _showBottomSheet(context: context, builder: task);
         },
         child: Row(
           children: [
@@ -29,12 +30,14 @@ Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
                     children: [
                       Row(
                         children: [
-                          Text(
-                            "${map['title']}",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                          Expanded(
+                            child: Text(
+                              "${task['title']}",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
                           ),
                         ],
                       ),
@@ -49,7 +52,7 @@ Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
                           ),
                           SizedBox(width: 10),
                           Text(
-                            "${DateFormat.yMMMd().format(DateTime.parse(map['date'].toString().split(' ').first))}",
+                            "${DateFormat.yMMMd().format(DateTime.parse(task['date'].toString().split(' ').first))}",
                             style: TextStyle(fontSize: 15, color: Colors.white),
                           ),
                         ],
@@ -65,7 +68,7 @@ Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
                           ),
                           SizedBox(width: 10),
                           Text(
-                            "${map['time']}",
+                            "${task['time']}",
                             style: TextStyle(fontSize: 15, color: Colors.white),
                           ),
                         ],
@@ -84,7 +87,7 @@ Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
             //       IconButton(
             //           onPressed: () {
             //             todocontroller.updatestatusTask(
-            //                 taskId: map["id"].toString(), status: "done");
+            //                 taskId: task["id"].toString(), status: "done");
             //           },
             //           icon: Icon(Icons.check_box,
             //               color: Get.isDarkMode
@@ -93,7 +96,7 @@ Widget buildTaskItem(Map map) => GetBuilder<TodoLayoutController>(
             //       IconButton(
             //           onPressed: () {
             //             todocontroller.updatestatusTask(
-            //                 taskId: map["id"].toString(), status: "archive");
+            //                 taskId: task["id"].toString(), status: "archive");
             //           },
             //           icon: Icon(Icons.archive,
             //               color: Get.isDarkMode
@@ -127,7 +130,18 @@ Widget tasksBuilder({required List<Map> tasks, required String message}) =>
             ),
           )
         : ListView.separated(
-            itemBuilder: (context, index) => buildTaskItem(tasks[index]),
+            itemBuilder: (context, index) {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 1000),
+                child: SlideAnimation(
+                  horizontalOffset: 50.0,
+                  child: FadeInAnimation(
+                    child: buildTaskItem(tasks[index]),
+                  ),
+                ),
+              );
+            },
             separatorBuilder: (context, index) => SizedBox(
                   height: 10,
                 ),

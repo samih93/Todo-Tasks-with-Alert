@@ -21,7 +21,7 @@ class Task {
 
   toJson() {
     return {
-      'id': id,
+   //   'id': id,
       'title': title,
       'date': date,
       'time': time,
