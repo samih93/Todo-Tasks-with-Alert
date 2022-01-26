@@ -16,3 +16,8 @@ TextStyle get headerStyle {
       fontSize: 24,
       color: Get.isDarkMode ? Colors.white : Colors.black);
 }
+
+TextStyle get titleofTaskitem {
+  return TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white);
+}

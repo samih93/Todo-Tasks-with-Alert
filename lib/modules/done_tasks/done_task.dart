@@ -9,7 +9,9 @@ class DoneTaskScreen extends StatelessWidget {
     return GetBuilder<TodoLayoutController>(
       init: Get.find<TodoLayoutController>(),
       builder: (todoController) => tasksBuilder(
-          tasks: todoController.donetaskMap, message: "No Finished tasks"),
+          tasks: todoController.donetask,
+          message: "No Finished tasks",
+          context: context),
     );
   }
 }

@@ -13,12 +13,12 @@ import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 import 'package:uuid/uuid.dart';
 
 class TodoLayoutController extends GetxController {
-  List<Map> _newtaskMap = [];
-  List<Map> get newtaskMap => _newtaskMap;
-  List<Map> _donetaskMap = [];
-  List<Map> get donetaskMap => _donetaskMap;
-  List<Map> _archivetaskMap = [];
-  List<Map> get archivetaskMap => _archivetaskMap;
+  List<Task> _newtask = [];
+  List<Task> get newtask => _newtask;
+  List<Task> _donetask = [];
+  List<Task> get donetask => _donetask;
+  List<Task> _archivetask = [];
+  List<Task> get archivetask => _archivetask;
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
 
@@ -46,7 +46,7 @@ class TodoLayoutController extends GetxController {
     await dbHelper.createDatabase();
     await getDatabasesPath().then((value) => print(value + "/todo.db"));
     await getalltasks();
-    print(_newtaskMap.length);
+    print(_newtask.length);
     super.onInit();
   }
 
@@ -81,26 +81,26 @@ class TodoLayoutController extends GetxController {
 
   Future<void> getalltasks() async {
     print(isloading.value);
-    _newtaskMap = [];
-    _donetaskMap = [];
-    _archivetaskMap = [];
+    _newtask = [];
+    _donetask = [];
+    _archivetask = [];
     isloading.value = true;
     await dbHelper.database
         .rawQuery("select * from tasks where date='${currentSelectedDate}'")
         .then((value) {
       value.forEach((element) {
         if (element['status'] == "new")
-          _newtaskMap.add(element);
+          _newtask.add(Task.fromJson(element));
         else if (element['status'] == "done")
-          _donetaskMap.add(element);
-        else if (element['status'] == "archive") _archivetaskMap.add(element);
+          _donetask.add(Task.fromJson(element));
+        else if (element['status'] == "archive")
+          _archivetask.add(Task.fromJson(element));
       });
-      _newtaskMap.length > 1
-          ? _newtaskMap.sort((a, b) {
-              return DateTime.parse(
-                      a['date'].toString() + " " + a['time'].toString())
+      _newtask.length > 1
+          ? _newtask.sort((a, b) {
+              return DateTime.parse(a.date.toString() + " " + a.time.toString())
                   .compareTo(DateTime.parse(
-                      b['date'].toString() + " " + b['time'].toString()));
+                      b.date.toString() + " " + b.time.toString()));
             })
           : [];
       // print("N  " + _newtaskMap.length.toString());

@@ -81,9 +81,7 @@ class TodoLayout extends StatelessWidget {
                           height: 80,
                           width: 60,
                           initialSelectedDate: DateTime.now(),
-                          selectionColor: Get.isDarkMode
-                              ? Colors.black54
-                              : defaultLightColor,
+                          selectionColor: defaultLightColor,
                           selectedTextColor: Colors.white,
                           dayTextStyle: TextStyle(
                             color: Get.isDarkMode ? Colors.white : Colors.black,

@@ -9,7 +9,8 @@ class NewTaskScreen extends StatelessWidget {
     return GetBuilder<TodoLayoutController>(
         init: Get.find<TodoLayoutController>(),
         builder: (todoController) => tasksBuilder(
-            tasks: todoController.newtaskMap,
+            tasks: todoController.newtask,
+            context: context,
             message: "No Tasks yet, Add more Tasks"));
   }
 }

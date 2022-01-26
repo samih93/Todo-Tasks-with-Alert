@@ -4,107 +4,95 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
+import 'package:todo_tasks_with_alert/model/task.dart';
+import 'package:todo_tasks_with_alert/shared/styles/styles.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 
-Widget buildTaskItem(Map task) => GetBuilder<TodoLayoutController>(
+Widget buildTaskItem(Task task, BuildContext context) =>
+    GetBuilder<TodoLayoutController>(
       init: Get.find<TodoLayoutController>(),
       // NOTE Dismissible to
       builder: (todocontroller) => InkWell(
         onTap: () {
-          print("On Tapped " + task['id'].toString());
-          //  _showBottomSheet(context: context, builder: task);
+          print("On Tapped " + task.id.toString());
+          _showBottomSheet(context, task);
         },
         child: Row(
           children: [
             Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: defaultLightColor,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
+              child: Stack(
+                alignment: AlignmentDirectional.topEnd,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: defaultLightColor,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Expanded(
-                            child: Text(
-                              "${task['title']}",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "${task.title} adscjiasdc ashkdbna asdb adgas d asdha",
+                                  style: titleofTaskitem,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Divider(
+                            color: Colors.grey.shade400,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.date_range_rounded,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "${DateFormat.yMMMd().format(DateTime.parse(task.date.toString().split(' ').first))}",
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 7,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.watch_later_outlined,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "${task.time}",
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.white),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.date_range_rounded,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            "${DateFormat.yMMMd().format(DateTime.parse(task['date'].toString().split(' ').first))}",
-                            style: TextStyle(fontSize: 15, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.watch_later_outlined,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            "${task['time']}",
-                            style: TextStyle(fontSize: 15, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.more_horiz),
+                  ),
+                ],
               ),
             ),
-            // Expanded(
-            //   flex: 2,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     mainAxisSize: MainAxisSize.max,
-            //     children: [
-            //       IconButton(
-            //           onPressed: () {
-            //             todocontroller.updatestatusTask(
-            //                 taskId: task["id"].toString(), status: "done");
-            //           },
-            //           icon: Icon(Icons.check_box,
-            //               color: Get.isDarkMode
-            //                   ? defaultDarkColor
-            //                   : defaultLightColor)),
-            //       IconButton(
-            //           onPressed: () {
-            //             todocontroller.updatestatusTask(
-            //                 taskId: task["id"].toString(), status: "archive");
-            //           },
-            //           icon: Icon(Icons.archive,
-            //               color: Get.isDarkMode
-            //                   ? defaultDarkColor
-            //                   : defaultLightColor)),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -112,7 +100,10 @@ Widget buildTaskItem(Map task) => GetBuilder<TodoLayoutController>(
 
 //NOTE ----------Build Task Builder -----------------------------
 // circular indicator then show list of tasks or archived taks or finished task
-Widget tasksBuilder({required List<Map> tasks, required String message}) =>
+Widget tasksBuilder(
+        {required List<Task> tasks,
+        required String message,
+        required BuildContext context}) =>
     tasks.length == 0
         ? Center(
             child: Column(
@@ -137,7 +128,7 @@ Widget tasksBuilder({required List<Map> tasks, required String message}) =>
                 child: SlideAnimation(
                   horizontalOffset: 50.0,
                   child: FadeInAnimation(
-                    child: buildTaskItem(tasks[index]),
+                    child: buildTaskItem(tasks[index], context),
                   ),
                 ),
               );
@@ -146,6 +137,94 @@ Widget tasksBuilder({required List<Map> tasks, required String message}) =>
                   height: 10,
                 ),
             itemCount: tasks.length);
+
+_showBottomSheet(BuildContext context, Task task) {
+  Get.bottomSheet(
+    Container(
+      padding: EdgeInsets.all(25),
+      height: task.status == "new"
+          ? MediaQuery.of(context).size.height * 0.32
+          : task.status == "done"
+              ? MediaQuery.of(context).size.height * 0.24
+              // if archived
+              : MediaQuery.of(context).size.height * 0.15,
+      color: Get.isDarkMode ? darkmodeColor : Colors.white,
+      child: _bottomSheetbuttons(task),
+    ),
+  );
+}
+
+_bottomSheetbuttons(Task task) {
+  TodoLayoutController todocontroller = Get.find<TodoLayoutController>();
+  return task.status == "new"
+      ? Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            defaultButton(
+                text: 'Done',
+                background: Colors.blue.shade400,
+                radius: 15,
+                onpress: () {
+                  todocontroller.updatestatusTask(
+                      taskId: task.id.toString(), status: "done");
+                  Get.back();
+                }),
+            defaultButton(
+                text: 'Archive',
+                background: Colors.grey.shade400,
+                radius: 15,
+                onpress: () {
+                  todocontroller.updatestatusTask(
+                      taskId: task.id.toString(), status: "archive");
+                  Get.back();
+                }),
+            defaultButton(
+                text: 'Delete',
+                background: Colors.red.shade400,
+                radius: 15,
+                onpress: () {
+                  todocontroller.deleteTask(taskId: task.id);
+                  Get.back();
+                }),
+          ],
+        )
+      : task.status == "done"
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                defaultButton(
+                    text: 'Archive',
+                    background: Colors.grey.shade400,
+                    radius: 15,
+                    onpress: () {
+                      todocontroller.updatestatusTask(
+                          taskId: task.id.toString(), status: "archive");
+                      Get.back();
+                    }),
+                defaultButton(
+                    text: 'Delete',
+                    background: Colors.red.shade400,
+                    radius: 15,
+                    onpress: () {
+                      todocontroller.deleteTask(taskId: task.id);
+                      Get.back();
+                    }),
+              ],
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                defaultButton(
+                    text: 'Delete',
+                    background: Colors.red.shade400,
+                    radius: 15,
+                    onpress: () {
+                      todocontroller.deleteTask(taskId: task.id);
+                      Get.back();
+                    }),
+              ],
+            );
+}
 
 //NOTE ----------My Divider -----------------------------
 Widget myDivider() => Container(

@@ -11,7 +11,7 @@ class Task {
   Task.fromJson(Map<dynamic, dynamic> map) {
     if (map == null) return;
 
-    id = map['id'];
+    id = map['id'].toString();
     title = map['title'];
     date = map['date'];
     time = map['time'];
@@ -21,7 +21,7 @@ class Task {
 
   toJson() {
     return {
-   //   'id': id,
+      //   'id': id,
       'title': title,
       'date': date,
       'time': time,

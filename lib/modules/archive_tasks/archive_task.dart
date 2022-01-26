@@ -9,7 +9,9 @@ class ArchiveTaskScreen extends StatelessWidget {
     return GetBuilder<TodoLayoutController>(
       init: Get.find<TodoLayoutController>(),
       builder: (todoController) => tasksBuilder(
-          tasks: todoController.archivetaskMap, message: "No Archived Tasks "),
+          tasks: todoController.archivetask,
+          message: "No Archived Tasks ",
+          context: context),
     );
   }
 }

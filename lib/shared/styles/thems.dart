@@ -5,31 +5,32 @@ import 'package:hexcolor/hexcolor.dart';
 const defaultLightColor = Colors.deepOrange;
 const defaultDarkColor = Colors.white;
 const defaultWidgetColor = Colors.deepOrange;
+const darkmodeColor = Color(0xFF121212);
 
 class Themes {
   static ThemeData darkThem = ThemeData(
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: HexColor('#525252'),
+    scaffoldBackgroundColor: darkmodeColor,
     primaryColor: defaultDarkColor,
-    //primarySwatch: defaultLightColor,
+    primarySwatch: defaultLightColor,
     appBarTheme: AppBarTheme(
         iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: HexColor('#525252'),
+        backgroundColor: darkmodeColor,
         elevation: 0,
         actionsIconTheme: IconThemeData(color: Colors.white),
         backwardsCompatibility: false,
         titleTextStyle: TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: HexColor('#525252'),
+          statusBarColor: darkmodeColor,
           statusBarIconBrightness: Brightness.light,
         )),
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: defaultDarkColor),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: HexColor('#525252'),
+        backgroundColor: darkmodeColor.withOpacity(0.8),
         selectedItemColor: defaultDarkColor,
-        unselectedItemColor: Colors.grey),
+        unselectedItemColor: Colors.grey.shade100),
 
     //NOTE : set default bodytext1
     textTheme: TextTheme(
@@ -60,6 +61,7 @@ class Themes {
           statusBarColor: Colors.white,
           statusBarIconBrightness: Brightness.dark,
         )),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(elevation: 10),
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: defaultLightColor),
 
