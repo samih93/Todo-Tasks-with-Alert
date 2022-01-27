@@ -11,6 +11,7 @@ class NewTaskScreen extends StatelessWidget {
         builder: (todoController) => tasksBuilder(
             tasks: todoController.newtask,
             context: context,
-            message: "No Tasks yet, Add more Tasks"));
+            message: "No Tasks yet, Add more Tasks",
+            svgimage: "assets/new_task_svg.svg"));
   }
 }

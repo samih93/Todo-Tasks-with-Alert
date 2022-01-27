@@ -11,6 +11,7 @@ class ArchiveTaskScreen extends StatelessWidget {
       builder: (todoController) => tasksBuilder(
           tasks: todoController.archivetask,
           message: "No Archived Tasks ",
+          svgimage: "assets/archived_task_svg.svg",
           context: context),
     );
   }

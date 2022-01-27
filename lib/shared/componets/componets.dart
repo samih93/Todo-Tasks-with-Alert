@@ -7,6 +7,7 @@ import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
 import 'package:todo_tasks_with_alert/model/task.dart';
 import 'package:todo_tasks_with_alert/shared/styles/styles.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 Widget buildTaskItem(Task task, BuildContext context) =>
     GetBuilder<TodoLayoutController>(
@@ -39,7 +40,7 @@ Widget buildTaskItem(Task task, BuildContext context) =>
                             children: [
                               Expanded(
                                 child: Text(
-                                  "${task.title} adscjiasdc ashkdbna asdb adgas d asdha",
+                                  "${task.title}",
                                   style: titleofTaskitem,
                                 ),
                               ),
@@ -88,7 +89,7 @@ Widget buildTaskItem(Task task, BuildContext context) =>
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.more_horiz),
+                    child: Icon(Icons.more_horiz, color: Colors.white),
                   ),
                 ],
               ),
@@ -103,28 +104,29 @@ Widget buildTaskItem(Task task, BuildContext context) =>
 Widget tasksBuilder(
         {required List<Task> tasks,
         required String message,
-        required BuildContext context}) =>
+        required BuildContext context,
+        required String svgimage}) =>
     tasks.length == 0
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.menu, size: 60, color: Colors.grey),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "$message",
-                  style: TextStyle(fontSize: 23, color: Colors.grey),
-                ),
-              ],
-            ),
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  height: MediaQuery.of(context).size.height * 0.24,
+                  child: SvgPicture.asset(svgimage)),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "$message",
+                style: TextStyle(fontSize: 23, color: Colors.grey),
+              ),
+            ],
           )
         : ListView.separated(
             itemBuilder: (context, index) {
               return AnimationConfiguration.staggeredList(
                 position: index,
-                duration: const Duration(milliseconds: 1000),
+                duration: const Duration(milliseconds: 1500),
                 child: SlideAnimation(
                   horizontalOffset: 50.0,
                   child: FadeInAnimation(

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:date_picker_timeline/extra/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

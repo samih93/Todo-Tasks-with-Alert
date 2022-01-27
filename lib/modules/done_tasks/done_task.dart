@@ -11,6 +11,7 @@ class DoneTaskScreen extends StatelessWidget {
       builder: (todoController) => tasksBuilder(
           tasks: todoController.donetask,
           message: "No Finished tasks",
+          svgimage: "assets/done_task_svg.svg",
           context: context),
     );
   }

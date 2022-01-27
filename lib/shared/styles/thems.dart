@@ -30,7 +30,7 @@ class Themes {
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: darkmodeColor.withOpacity(0.8),
         selectedItemColor: defaultDarkColor,
-        unselectedItemColor: Colors.grey.shade100),
+        unselectedItemColor: Colors.grey.withOpacity(0.6)),
 
     //NOTE : set default bodytext1
     textTheme: TextTheme(
