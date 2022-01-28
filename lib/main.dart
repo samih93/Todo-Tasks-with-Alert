@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layout.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/cashhelper.dart';
+import 'package:todo_tasks_with_alert/shared/network/local/notification.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 
 void main() async {
@@ -14,6 +16,7 @@ void main() async {
   if (isdarkcashedthem != null) {
     Get.changeTheme(isdarkcashedthem ? Themes.darkThem : Themes.lightTheme);
   }
+
   Get.put(TodoLayoutController());
 
   runApp(MyApp());
@@ -27,9 +30,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!),
+      //NOTE to use 24 hour format
+      // builder: (context, child) => MediaQuery(
+      //     data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+      //     child: child!),
       debugShowCheckedModeBanner: false,
       theme: Themes.lightTheme,
       darkTheme: Themes.darkThem,

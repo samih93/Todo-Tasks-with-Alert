@@ -76,8 +76,9 @@ Widget buildTaskItem(Task task, BuildContext context) =>
                                 color: Colors.white,
                               ),
                               SizedBox(width: 10),
+                              //NOTE 24 hours to am pm
                               Text(
-                                "${task.time}",
+                                "${DateFormat("h:mm a").format(DateTime.parse("2022-10-10 " + task.time.toString())).toString()}",
                                 style: TextStyle(
                                     fontSize: 15, color: Colors.white),
                               ),

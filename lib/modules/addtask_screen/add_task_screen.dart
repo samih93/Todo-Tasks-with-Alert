@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
 import 'package:todo_tasks_with_alert/model/task.dart';
 import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
+import 'package:todo_tasks_with_alert/shared/network/local/notification.dart';
 import 'package:todo_tasks_with_alert/shared/styles/styles.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 
@@ -48,7 +50,6 @@ class AddTaskScreen extends StatelessWidget {
                       defaultTextFormField(
                           controller: titlecontroller,
                           inputtype: TextInputType.text,
-                          prefixIcon: Icon(Icons.title),
                           ontap: () {},
                           onvalidate: (value) {
                             if (value!.isEmpty) {
@@ -95,8 +96,13 @@ class AddTaskScreen extends StatelessWidget {
                             showTimePicker(
                                     context: context,
                                     initialTime: TimeOfDay.now())
-                                .then((value) => timecontroller.text =
-                                    value!.format(context).toString());
+                                .then((value) {
+                              timecontroller.text =
+                                  value!.format(context).toString();
+                              //! 1970-01-01 time selected:00.000
+                              // print(DateFormat("hh:mm a")
+                              //     .parse(timecontroller.text.toString()));
+                            });
                           },
                           onvalidate: (value) {
                             if (value!.isEmpty) {
@@ -108,36 +114,59 @@ class AddTaskScreen extends StatelessWidget {
                         height: 10,
                       ),
                       //NOTE Remind
-                      Obx(
-                        () => defaultTextFormField(
-                          readonly: true,
-                          hinttext:
-                              "${todocontroller.selectedRemindItem.value} minutes early",
-                          controller: remindcontroller,
-                          inputtype: TextInputType.name,
-                          suffixIcon: DropdownButton(
-                            underline: Container(
-                              height: 0,
+                      Container(
+                        width: double.infinity,
+                        height: 60,
+                        child: DropdownButtonFormField<String>(
+                          value: todocontroller.selectedRemindItem.value,
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.grey),
                             ),
-                            icon: Icon(Icons.keyboard_arrow_down,
-                                color: Colors.grey),
-                            iconSize: 25,
-                            elevation: 4,
-                            items: remindList
-                                .map<DropdownMenuItem<String>>((int value) {
-                              return DropdownMenuItem<String>(
-                                  value: value.toString(),
-                                  child: Text(value.toString()));
-                            }).toList(),
-                            onChanged: (value) {
-                              todocontroller.onchangeremindlist(value);
-                              print(todocontroller.selectedRemindItem.value);
-                            },
-                            //! to display number beside the arrow
-                            // value: todocontroller.selectedRemindItem.value,
                           ),
+                          items: remindList
+                              .map((e) => DropdownMenuItem<String>(
+                                    value: e.toString(),
+                                    child: Text(e.toString()),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            todocontroller.onchangeremindlist(value);
+                            print(todocontroller.selectedRemindItem.value);
+                          },
                         ),
                       ),
+                      // Obx(
+                      //   () => defaultTextFormField(
+                      //     readonly: true,
+                      //     hinttext:
+                      //         "${todocontroller.selectedRemindItem.value} minutes early",
+                      //     controller: remindcontroller,
+                      //     inputtype: TextInputType.name,
+                      //     suffixIcon: DropdownButton(
+                      //       underline: Container(
+                      //         height: 0,
+                      //       ),
+                      //       icon: Icon(Icons.keyboard_arrow_down,
+                      //           color: Colors.grey),
+                      //       iconSize: 25,
+                      //       elevation: 4,
+                      //       items: remindList
+                      //           .map<DropdownMenuItem<String>>((int value) {
+                      //         return DropdownMenuItem<String>(
+                      //             value: value.toString(),
+                      //             child: Text(value.toString()));
+                      //       }).toList(),
+                      //       onChanged: (value) {
+                      //         todocontroller.onchangeremindlist(value);
+                      //         print(todocontroller.selectedRemindItem.value);
+                      //       },
+                      //       //! to display number beside the arrow
+                      //       // value: todocontroller.selectedRemindItem.value,
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 10,
                       ),
@@ -147,12 +176,18 @@ class AddTaskScreen extends StatelessWidget {
                           radius: 15,
                           onpress: () {
                             if (_formkey.currentState!.validate()) {
+                              //NOTE  am pm to 24 hours
+                              DateTime date2 = DateFormat("hh:mm a").parse(
+                                  timecontroller.text
+                                      .toString()); // think this will work better for you
+                              String time =
+                                  DateFormat("HH:mm").format(date2).toString();
                               todocontroller
                                   .insertTaskByModel(
                                       model: new Task(
                                           title: titlecontroller.text,
                                           date: datecontroller.text,
-                                          time: timecontroller.text,
+                                          time: time,
                                           status: "new",
                                           remind: int.parse(todocontroller
                                               .selectedRemindItem.value)))
@@ -161,9 +196,17 @@ class AddTaskScreen extends StatelessWidget {
                                   //     date: datecontroller.text,
                                   //     time: timecontroller.text)
                                   .then((value) {
+                                //NOTE set Notification for task
+                                NotifcationApi().scheduleNotification(
+                                    DateTime.parse(datecontroller.text +
+                                        " " +
+                                        time.toString()),
+                                    titlecontroller.text,
+                                    timecontroller.text);
                                 titlecontroller.text = "";
                                 datecontroller.text = "";
                                 timecontroller.text = "";
+
                                 Get.back();
                               });
                             }
