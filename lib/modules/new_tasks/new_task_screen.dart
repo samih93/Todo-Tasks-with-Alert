@@ -7,11 +7,13 @@ class NewTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TodoLayoutController>(
-        init: Get.find<TodoLayoutController>(),
-        builder: (todoController) => tasksBuilder(
-            tasks: todoController.newtask,
-            context: context,
-            message: "No Tasks yet, Add more Tasks",
-            svgimage: "assets/new_task_svg.svg"));
+      init: Get.find<TodoLayoutController>(),
+      builder: (todoController) => tasksBuilder(
+          tasks: todoController.newtask,
+          context: context,
+          message: "No Tasks yet, Add more Tasks",
+          svgimage: "assets/new_task_svg.svg",
+          isA_New_Item_IsAdded: todoController.isA_New_Item_IsAdded),
+    );
   }
 }

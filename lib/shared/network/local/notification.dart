@@ -1,27 +1,33 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 class NotifcationApi {
   static final _notifications = FlutterLocalNotificationsPlugin();
-  //String? selectedNotificationPayload;
+  static String? selectedNotificationPayload;
 
-  static final AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings("@mipmap/ic_launcher");
-  static final InitializationSettings initializationSettings =
-      InitializationSettings(
-    android: initializationSettingsAndroid,
-  );
+  static late AndroidInitializationSettings initializationSettingsAndroid;
+  static late InitializationSettings initializationSettings;
 
-  Future shownotification(
+  static init() async {
+    initializationSettingsAndroid =
+        AndroidInitializationSettings("@mipmap/ic_launcher");
+    initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+    tz.initializeTimeZones();
+  }
+
+  static Future shownotification(
       {int id = 0, String? title, String? body, String? payload}) async {
-    // await _notifications.initialize(initializationSettings,
-    //     onSelectNotification: (String? payload) async {
-    //   if (payload != null) {
-    //     debugPrint('notification payload: $payload');
-    //   }
-    //   selectedNotificationPayload = payload;
-    // });
+    await _notifications.initialize(initializationSettings,
+        onSelectNotification: (String? payload) async {
+      if (payload != null) {
+        debugPrint('notification payload: $payload');
+      }
+      selectedNotificationPayload = payload;
+    });
     _notifications.show(id, title, body, await _notificationDetails(),
         payload: payload);
   }
@@ -37,9 +43,8 @@ class NotifcationApi {
     );
   }
 
-  Future scheduleNotification(
+  static Future scheduleNotification(
       DateTime scheduleDate, String title, String time) async {
-    tz.initializeTimeZones();
     await _notifications.zonedSchedule(
         0,
         title,

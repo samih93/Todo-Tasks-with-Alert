@@ -22,6 +22,8 @@ class TodoLayoutController extends GetxController {
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
 
+  bool isA_New_Item_IsAdded = false;
+
   String currentSelectedDate = DateTime.now().toString().split(' ').first;
 
   final screens = [NewTaskScreen(), DoneTaskScreen(), ArchiveTaskScreen()];
@@ -69,7 +71,7 @@ class TodoLayoutController extends GetxController {
 // NOTE on select date in time line
   void onchangeselectedate(selecteddate) {
     currentSelectedDate = selecteddate;
-    update();
+    isA_New_Item_IsAdded = false;
     getalltasks();
   }
 
@@ -97,11 +99,21 @@ class TodoLayoutController extends GetxController {
           _archivetask.add(Task.fromJson(element));
       });
       _newtask.length > 1
-          ? _newtask.sort((a, b) {
-              return DateTime.parse(a.date.toString() + " " + a.time.toString())
-                  .compareTo(DateTime.parse(
-                      b.date.toString() + " " + b.time.toString()));
-            })
+          //NOTE if does not have any new task
+          ? isA_New_Item_IsAdded == false
+              ? _newtask.sort((a, b) {
+                  return DateTime.parse(
+                          a.date.toString() + " " + a.time.toString())
+                      .compareTo(DateTime.parse(
+                          b.date.toString() + " " + b.time.toString()));
+                })
+              //NOTE if there a new task
+              : _newtask.sort((a, b) {
+                  return DateTime.parse(
+                          b.date.toString() + " " + b.time.toString())
+                      .compareTo(DateTime.parse(
+                          a.date.toString() + " " + a.time.toString()));
+                })
           : [];
       // print("N  " + _newtaskMap.length.toString());
       // print("D  " + _donetaskMap.length.toString());
@@ -126,6 +138,7 @@ class TodoLayoutController extends GetxController {
     // model.id = uuid.v1();
     // print(model.toJson());
     await dbclient.insert(taskTable, model.toJson());
+    isA_New_Item_IsAdded = true;
     getalltasks();
   }
 

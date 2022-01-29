@@ -197,10 +197,13 @@ class AddTaskScreen extends StatelessWidget {
                                   //     time: timecontroller.text)
                                   .then((value) {
                                 //NOTE set Notification for task
-                                NotifcationApi().scheduleNotification(
+                                NotifcationApi.scheduleNotification(
                                     DateTime.parse(datecontroller.text +
-                                        " " +
-                                        time.toString()),
+                                            " " +
+                                            time.toString())
+                                        .subtract(Duration(
+                                            minutes: int.parse(todocontroller
+                                                .selectedRemindItem.value))),
                                     titlecontroller.text,
                                     timecontroller.text);
                                 titlecontroller.text = "";

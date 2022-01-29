@@ -10,6 +10,7 @@ import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CashHelper.init();
+  await NotifcationApi.init();
   // NOTE check cash theme and set it to Get
   bool? isdarkcashedthem = CashHelper.getThem(key: "isdark");
   print("cash theme " + isdarkcashedthem.toString());
