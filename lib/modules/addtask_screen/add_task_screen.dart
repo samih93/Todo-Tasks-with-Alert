@@ -174,7 +174,7 @@ class AddTaskScreen extends StatelessWidget {
                           text: 'Create Task',
                           background: defaultLightColor,
                           radius: 15,
-                          onpress: () {
+                          onpress: () async {
                             if (_formkey.currentState!.validate()) {
                               //NOTE  am pm to 24 hours
                               DateTime date2 = DateFormat("hh:mm a").parse(
@@ -182,7 +182,7 @@ class AddTaskScreen extends StatelessWidget {
                                       .toString()); // think this will work better for you
                               String time =
                                   DateFormat("HH:mm").format(date2).toString();
-                              todocontroller
+                              await todocontroller
                                   .insertTaskByModel(
                                       model: new Task(
                                           title: titlecontroller.text,
@@ -195,7 +195,8 @@ class AddTaskScreen extends StatelessWidget {
                                   //     title: titlecontroller.text,
                                   //     date: datecontroller.text,
                                   //     time: timecontroller.text)
-                                  .then((value) {
+                                  .then((taskId) {
+                                print("taskId " + taskId.toString());
                                 //NOTE set Notification for task
                                 NotifcationApi.scheduleNotification(
                                     DateTime.parse(datecontroller.text +
@@ -204,6 +205,7 @@ class AddTaskScreen extends StatelessWidget {
                                         .subtract(Duration(
                                             minutes: int.parse(todocontroller
                                                 .selectedRemindItem.value))),
+                                    taskId.toString(),
                                     titlecontroller.text,
                                     timecontroller.text);
                                 titlecontroller.text = "";

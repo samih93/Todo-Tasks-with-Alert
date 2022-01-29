@@ -10,13 +10,24 @@ class NotifcationApi {
   static late AndroidInitializationSettings initializationSettingsAndroid;
   static late InitializationSettings initializationSettings;
 
-  static init() async {
-    initializationSettingsAndroid =
-        AndroidInitializationSettings("@mipmap/ic_launcher");
+  static Future init() async {
+    initializationSettingsAndroid = AndroidInitializationSettings("flutter");
     initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
     tz.initializeTimeZones();
+  }
+
+  static Future _notificationDetails(channelId) async {
+    return NotificationDetails(
+      android: AndroidNotificationDetails(
+        //NOTE each task has channel  so channel id is the task id
+        channelId,
+        '$channelId Notifications',
+        importance: Importance.max,
+        priority: Priority.high,
+      ),
+    );
   }
 
   static Future shownotification(
@@ -28,29 +39,19 @@ class NotifcationApi {
       }
       selectedNotificationPayload = payload;
     });
-    _notifications.show(id, title, body, await _notificationDetails(),
+    _notifications.show(
+        id, title, body, await _notificationDetails("channel Id"),
         payload: payload);
   }
 
-  static Future _notificationDetails() async {
-    return NotificationDetails(
-      android: AndroidNotificationDetails(
-        'high_importance_channel',
-        'High Importance Notifications',
-        importance: Importance.max,
-        priority: Priority.high,
-      ),
-    );
-  }
-
-  static Future scheduleNotification(
-      DateTime scheduleDate, String title, String time) async {
+  static Future scheduleNotification(DateTime scheduleDate,
+      String taskChannelId, String title, String time) async {
     await _notifications.zonedSchedule(
         0,
         title,
         "You have a Task ToDo At " + time,
         await tz.TZDateTime.from(scheduleDate, tz.local),
-        await _notificationDetails(),
+        await _notificationDetails(taskChannelId),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,

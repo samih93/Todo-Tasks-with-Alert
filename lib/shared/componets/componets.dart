@@ -107,7 +107,7 @@ Widget tasksBuilder(
         required String message,
         required BuildContext context,
         required String svgimage,
-        isA_New_Item_IsAdded = false}) =>
+        }) =>
     tasks.length == 0
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -125,7 +125,6 @@ Widget tasksBuilder(
             ],
           )
         : ListView.separated(
-            reverse: isA_New_Item_IsAdded,
             itemBuilder: (context, index) {
               return AnimationConfiguration.staggeredList(
                 position: index,

@@ -22,8 +22,6 @@ class TodoLayoutController extends GetxController {
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
 
-  bool isA_New_Item_IsAdded = false;
-
   String currentSelectedDate = DateTime.now().toString().split(' ').first;
 
   final screens = [NewTaskScreen(), DoneTaskScreen(), ArchiveTaskScreen()];
@@ -71,7 +69,6 @@ class TodoLayoutController extends GetxController {
 // NOTE on select date in time line
   void onchangeselectedate(selecteddate) {
     currentSelectedDate = selecteddate;
-    isA_New_Item_IsAdded = false;
     getalltasks();
   }
 
@@ -100,21 +97,13 @@ class TodoLayoutController extends GetxController {
       });
       _newtask.length > 1
           //NOTE if does not have any new task
-          ? isA_New_Item_IsAdded == false
-              ? _newtask.sort((a, b) {
-                  return DateTime.parse(
-                          a.date.toString() + " " + a.time.toString())
-                      .compareTo(DateTime.parse(
-                          b.date.toString() + " " + b.time.toString()));
-                })
-              //NOTE if there a new task
-              : _newtask.sort((a, b) {
-                  return DateTime.parse(
-                          b.date.toString() + " " + b.time.toString())
-                      .compareTo(DateTime.parse(
-                          a.date.toString() + " " + a.time.toString()));
-                })
+          ? _newtask.sort((a, b) {
+              return DateTime.parse(a.date.toString() + " " + a.time.toString())
+                  .compareTo(DateTime.parse(
+                      b.date.toString() + " " + b.time.toString()));
+            })
           : [];
+
       // print("N  " + _newtaskMap.length.toString());
       // print("D  " + _donetaskMap.length.toString());
       // print("A  " + _archivetaskMap.length.toString());
@@ -132,29 +121,56 @@ class TodoLayoutController extends GetxController {
   }
 
 //  add task by model
-  insertTaskByModel({required Task model}) async {
+  Future<int> insertTaskByModel({required Task model}) async {
     var dbclient = await dbHelper.database;
     // var uuid = Uuid();
     // model.id = uuid.v1();
     // print(model.toJson());
-    await dbclient.insert(taskTable, model.toJson());
-    isA_New_Item_IsAdded = true;
-    getalltasks();
+    int id = await dbclient.insert(taskTable, model.toJson());
+    await dbHelper.database
+        .rawQuery("select * from tasks where id='${id}'")
+        .then((value) {
+      value.forEach((element) {
+        _newtask.add(Task.fromJson(element));
+        update();
+      });
+    });
+    //  getalltasks();
+    return id;
   }
 
   updatestatusTask({required String taskId, required String status}) async {
     var dbclient = await dbHelper.database;
-    await dbclient.rawUpdate(
-        "UPDATE  $taskTable SET status= '$status' where  id='$taskId'");
+    await dbclient
+        .rawUpdate(
+            "UPDATE  $taskTable SET status= '$status' where  id='$taskId'")
+        .then((value) {
+      Task task = _newtask.where((element) => element.id == taskId).first;
+      if (!task.isBlank!) _newtask.remove(task);
+      if (status == "done") {
+        task.status = "done";
+        _donetask.add(task);
+      } else {
+        task.status = "archive";
+        _archivetask.add(task);
+      }
+      update();
+    });
+
     print("Updated");
-    getalltasks();
+    //getalltasks();
   }
 
   deleteTask({required String taskId}) async {
     var dbclient = await dbHelper.database;
-    await dbclient.rawDelete("DELETE FROM  $taskTable where  id='$taskId'");
+    await dbclient
+        .rawDelete("DELETE FROM  $taskTable where  id='$taskId'")
+        .then((value) {
+      Task task = _newtask.where((element) => element.id == taskId).first;
+      if (!task.isBlank!) _newtask.remove(task);
+      update();
+    });
     print("deleted");
-    getalltasks();
   }
 
 //NOTE For multi them -------------------------
