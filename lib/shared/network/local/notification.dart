@@ -22,8 +22,9 @@ class NotifcationApi {
     return NotificationDetails(
       android: AndroidNotificationDetails(
         //NOTE each task has channel  so channel id is the task id
-        channelId,
+        '$channelId',
         '$channelId Notifications',
+        channelDescription: '$channelId Description',
         importance: Importance.max,
         priority: Priority.high,
       ),

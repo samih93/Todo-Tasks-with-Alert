@@ -123,6 +123,7 @@ class TodoLayoutController extends GetxController {
 //  add task by model
   Future<int> insertTaskByModel({required Task model}) async {
     var dbclient = await dbHelper.database;
+    //! if i need random id
     // var uuid = Uuid();
     // model.id = uuid.v1();
     // print(model.toJson());
@@ -132,10 +133,15 @@ class TodoLayoutController extends GetxController {
         .then((value) {
       value.forEach((element) {
         _newtask.add(Task.fromJson(element));
+        // order by date time
+        _newtask.sort((a, b) {
+          return DateTime.parse(a.date.toString() + " " + a.time.toString())
+              .compareTo(
+                  DateTime.parse(b.date.toString() + " " + b.time.toString()));
+        });
         update();
       });
     });
-    //  getalltasks();
     return id;
   }
 
@@ -145,16 +151,30 @@ class TodoLayoutController extends GetxController {
         .rawUpdate(
             "UPDATE  $taskTable SET status= '$status' where  id='$taskId'")
         .then((value) {
-      Task task = _newtask.where((element) => element.id == taskId).first;
-      if (!task.isBlank!) _newtask.remove(task);
-      if (status == "done") {
-        task.status = "done";
-        _donetask.add(task);
-      } else {
+      // NOTE if current index ==0 i have two option done or archive
+      if (currentIndex == 0) {
+        Task task = _newtask.where((element) => element.id == taskId).first;
+        if (!task.isBlank!) _newtask.remove(task);
+        if (status == "done") {
+          task.status = "done";
+          _donetask.add(task);
+        } else {
+          task.status = "archive";
+          _archivetask.add(task);
+        }
+      }
+      // NOTE if current index ==1 i have one option archive
+      if (currentIndex == 1) {
+        Task task = _donetask.where((element) => element.id == taskId).first;
+        // NOTE if exist remove it from _done and add to archive and update her status in archive
+        if (!task.isBlank!) _donetask.remove(task);
         task.status = "archive";
         _archivetask.add(task);
       }
+
       update();
+    }).catchError((error) {
+      print(error.toString());
     });
 
     print("Updated");
@@ -166,9 +186,30 @@ class TodoLayoutController extends GetxController {
     await dbclient
         .rawDelete("DELETE FROM  $taskTable where  id='$taskId'")
         .then((value) {
-      Task task = _newtask.where((element) => element.id == taskId).first;
-      if (!task.isBlank!) _newtask.remove(task);
+      //NOTE if i am in new task screen
+      if (currentIndex == 0) {
+        Task newtask = _newtask.where((element) => element.id == taskId).first;
+        //NOTE check if new task contain taskId
+        if (!newtask.isBlank!) _newtask.remove(newtask);
+      }
+
+      //NOTE if i am in done task screen
+      if (currentIndex == 1) {
+        Task donetask =
+            _donetask.where((element) => element.id == taskId).first;
+        //NOTE check if done task contain taskId
+        if (!donetask.isBlank!) _donetask.remove(donetask);
+      }
+      //NOTE if i am in Archive task screen
+      if (currentIndex == 2) {
+        Task archivetask =
+            _archivetask.where((element) => element.id == taskId).first;
+        //NOTE check if done task contain taskId
+        if (!archivetask.isBlank!) _archivetask.remove(archivetask);
+      }
       update();
+    }).catchError((error) {
+      print(error.toString());
     });
     print("deleted");
   }
