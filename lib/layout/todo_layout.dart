@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
-import 'package:todo_tasks_with_alert/model/task.dart';
-import 'package:todo_tasks_with_alert/modules/addtask_screen/add_task_screen.dart';
+import 'package:todo_tasks_with_alert/model/event.dart';
+import 'package:todo_tasks_with_alert/modules/add_event_screen/add_event_screen.dart';
 import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/notification.dart';
@@ -61,10 +61,10 @@ class TodoLayout extends StatelessWidget {
                             ],
                           ),
                           defaultButton(
-                              text: "Add Task",
+                              text: "Add Event",
                               width: 100,
                               onpress: () {
-                                Get.to(() => AddTaskScreen());
+                                Get.to(() => AddEventScreen());
                               },
                               background: defaultLightColor,
                               radius: 15),

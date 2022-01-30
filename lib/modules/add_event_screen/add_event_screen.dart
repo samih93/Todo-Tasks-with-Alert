@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
-import 'package:todo_tasks_with_alert/model/task.dart';
+import 'package:todo_tasks_with_alert/model/event.dart';
 import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/notification.dart';
 import 'package:todo_tasks_with_alert/shared/styles/styles.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 
-class AddTaskScreen extends StatelessWidget {
+class AddEventScreen extends StatelessWidget {
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   var titlecontroller = TextEditingController();
@@ -35,7 +35,7 @@ class AddTaskScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Add Task',
+                'Add Event',
                 style: headerStyle,
               ),
               SizedBox(
@@ -56,7 +56,7 @@ class AddTaskScreen extends StatelessWidget {
                               return "title must not be empty";
                             }
                           },
-                          text: "Task Name"),
+                          text: "Event Name"),
                       SizedBox(
                         height: 10,
                       ),
@@ -171,7 +171,7 @@ class AddTaskScreen extends StatelessWidget {
                         height: 10,
                       ),
                       defaultButton(
-                          text: 'Create Task',
+                          text: 'Create Event',
                           background: defaultLightColor,
                           radius: 15,
                           onpress: () async {
@@ -183,8 +183,8 @@ class AddTaskScreen extends StatelessWidget {
                               String time =
                                   DateFormat("HH:mm").format(date2).toString();
                               await todocontroller
-                                  .insertTaskByModel(
-                                      model: new Task(
+                                  .inserteventByModel(
+                                      model: new Event(
                                           title: titlecontroller.text,
                                           date: datecontroller.text,
                                           time: time,
@@ -195,9 +195,9 @@ class AddTaskScreen extends StatelessWidget {
                                   //     title: titlecontroller.text,
                                   //     date: datecontroller.text,
                                   //     time: timecontroller.text)
-                                  .then((taskId) {
-                                print("taskId " + taskId.toString());
-                                //NOTE set Notification for task
+                                  .then((eventId) {
+                                print("eventId " + eventId.toString());
+                                //NOTE set Notification for event
                                 NotifcationApi.scheduleNotification(
                                     DateTime.parse(datecontroller.text +
                                             " " +
@@ -205,7 +205,7 @@ class AddTaskScreen extends StatelessWidget {
                                         .subtract(Duration(
                                             minutes: int.parse(todocontroller
                                                 .selectedRemindItem.value))),
-                                    taskId.toString(),
+                                    eventId.toString(),
                                     titlecontroller.text,
                                     timecontroller.text);
                                 titlecontroller.text = "";

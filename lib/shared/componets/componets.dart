@@ -4,12 +4,12 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
-import 'package:todo_tasks_with_alert/model/task.dart';
+import 'package:todo_tasks_with_alert/model/event.dart';
 import 'package:todo_tasks_with_alert/shared/styles/styles.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-Widget buildTaskItem(Task task, BuildContext context) =>
+Widget buildEventItem(Event task, BuildContext context) =>
     GetBuilder<TodoLayoutController>(
       init: Get.find<TodoLayoutController>(),
       // NOTE Dismissible to
@@ -102,12 +102,12 @@ Widget buildTaskItem(Task task, BuildContext context) =>
 
 //NOTE ----------Build Task Builder -----------------------------
 // circular indicator then show list of tasks or archived taks or finished task
-Widget tasksBuilder(
-        {required List<Task> tasks,
-        required String message,
-        required BuildContext context,
-        required String svgimage,
-        }) =>
+Widget eventsBuilder({
+  required List<Event> tasks,
+  required String message,
+  required BuildContext context,
+  required String svgimage,
+}) =>
     tasks.length == 0
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -132,7 +132,7 @@ Widget tasksBuilder(
                 child: SlideAnimation(
                   horizontalOffset: 50.0,
                   child: FadeInAnimation(
-                    child: buildTaskItem(tasks[index], context),
+                    child: buildEventItem(tasks[index], context),
                   ),
                 ),
               );
@@ -142,25 +142,25 @@ Widget tasksBuilder(
                 ),
             itemCount: tasks.length);
 
-_showBottomSheet(BuildContext context, Task task) {
+_showBottomSheet(BuildContext context, Event event) {
   Get.bottomSheet(
     Container(
       padding: EdgeInsets.all(25),
-      height: task.status == "new"
+      height: event.status == "new"
           ? MediaQuery.of(context).size.height * 0.32
-          : task.status == "done"
+          : event.status == "done"
               ? MediaQuery.of(context).size.height * 0.24
               // if archived
               : MediaQuery.of(context).size.height * 0.15,
       color: Get.isDarkMode ? darkmodeColor : Colors.white,
-      child: _bottomSheetbuttons(task),
+      child: _bottomSheetbuttons(event),
     ),
   );
 }
 
-_bottomSheetbuttons(Task task) {
+_bottomSheetbuttons(Event event) {
   TodoLayoutController todocontroller = Get.find<TodoLayoutController>();
-  return task.status == "new"
+  return event.status == "new"
       ? Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -169,8 +169,8 @@ _bottomSheetbuttons(Task task) {
                 background: Colors.blue.shade400,
                 radius: 15,
                 onpress: () {
-                  todocontroller.updatestatusTask(
-                      taskId: task.id.toString(), status: "done");
+                  todocontroller.updatestatusevent(
+                      eventId: event.id.toString(), status: "done");
                   Get.back();
                 }),
             defaultButton(
@@ -178,8 +178,8 @@ _bottomSheetbuttons(Task task) {
                 background: Colors.grey.shade400,
                 radius: 15,
                 onpress: () {
-                  todocontroller.updatestatusTask(
-                      taskId: task.id.toString(), status: "archive");
+                  todocontroller.updatestatusevent(
+                      eventId: event.id.toString(), status: "archive");
                   Get.back();
                 }),
             defaultButton(
@@ -187,12 +187,12 @@ _bottomSheetbuttons(Task task) {
                 background: Colors.red.shade400,
                 radius: 15,
                 onpress: () {
-                  todocontroller.deleteTask(taskId: task.id);
+                  todocontroller.deleteEvent(eventId: event.id);
                   Get.back();
                 }),
           ],
         )
-      : task.status == "done"
+      : event.status == "done"
           ? Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -201,8 +201,8 @@ _bottomSheetbuttons(Task task) {
                     background: Colors.grey.shade400,
                     radius: 15,
                     onpress: () {
-                      todocontroller.updatestatusTask(
-                          taskId: task.id.toString(), status: "archive");
+                      todocontroller.updatestatusevent(
+                          eventId: event.id.toString(), status: "archive");
                       Get.back();
                     }),
                 defaultButton(
@@ -210,7 +210,7 @@ _bottomSheetbuttons(Task task) {
                     background: Colors.red.shade400,
                     radius: 15,
                     onpress: () {
-                      todocontroller.deleteTask(taskId: task.id);
+                      todocontroller.deleteEvent(eventId: event.id);
                       Get.back();
                     }),
               ],
@@ -223,7 +223,7 @@ _bottomSheetbuttons(Task task) {
                     background: Colors.red.shade400,
                     radius: 15,
                     onpress: () {
-                      todocontroller.deleteTask(taskId: task.id);
+                      todocontroller.deleteEvent(eventId: event.id);
                       Get.back();
                     }),
               ],

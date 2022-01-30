@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final String taskTable = "tasks";
+final String eventTable = "events";
 
 //NOTE ----------Get Date Formated For Task -----------------------------
 String getDateFormated(String date) {

@@ -1,14 +1,14 @@
-class Task {
+class Event {
   late String id, title, date, time, status;
   late int remind;
-  Task(
+  Event(
       {required this.title,
       required this.date,
       required this.time,
       required this.status,
       required this.remind});
 
-  Task.fromJson(Map<dynamic, dynamic> map) {
+  Event.fromJson(Map<dynamic, dynamic> map) {
     if (map == null) return;
 
     id = map['id'].toString();

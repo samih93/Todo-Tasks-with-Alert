@@ -3,15 +3,15 @@ import 'package:get/get.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
 import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
 
-class DoneTaskScreen extends StatelessWidget {
+class ArchiveEventScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TodoLayoutController>(
       init: Get.find<TodoLayoutController>(),
-      builder: (todoController) => tasksBuilder(
-          tasks: todoController.donetask,
-          message: "No Finished tasks",
-          svgimage: "assets/done_task_svg.svg",
+      builder: (todoController) => eventsBuilder(
+          tasks: todoController.archiveeventList,
+          message: "No Archived Events ",
+          svgimage: "assets/archived_task_svg.svg",
           context: context),
     );
   }

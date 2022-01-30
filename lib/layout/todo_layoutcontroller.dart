@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:todo_tasks_with_alert/model/task.dart';
-import 'package:todo_tasks_with_alert/modules/archive_tasks/archive_task.dart';
-import 'package:todo_tasks_with_alert/modules/done_tasks/done_task.dart';
-import 'package:todo_tasks_with_alert/modules/new_tasks/new_task_screen.dart';
+import 'package:todo_tasks_with_alert/model/event.dart';
+import 'package:todo_tasks_with_alert/modules/archive_events/archive_task.dart';
+import 'package:todo_tasks_with_alert/modules/done_events/done_events.dart';
+import 'package:todo_tasks_with_alert/modules/my_events/my_event_screen.dart';
 import 'package:todo_tasks_with_alert/shared/componets/constants.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/TodoDbHelper.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/cashhelper.dart';
@@ -13,20 +13,20 @@ import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 import 'package:uuid/uuid.dart';
 
 class TodoLayoutController extends GetxController {
-  List<Task> _newtask = [];
-  List<Task> get newtask => _newtask;
-  List<Task> _donetask = [];
-  List<Task> get donetask => _donetask;
-  List<Task> _archivetask = [];
-  List<Task> get archivetask => _archivetask;
+  List<Event> _neweventList = [];
+  List<Event> get neweventList => _neweventList;
+  List<Event> _doneeventList = [];
+  List<Event> get doneeventList => _doneeventList;
+  List<Event> _archiveeventList = [];
+  List<Event> get archiveeventList => _archiveeventList;
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
 
   String currentSelectedDate = DateTime.now().toString().split(' ').first;
 
-  final screens = [NewTaskScreen(), DoneTaskScreen(), ArchiveTaskScreen()];
+  final screens = [MyEventScreen(), DoneEventScreen(), ArchiveEventScreen()];
   List<BottomNavigationBarItem> bottomItems = [
-    BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Task"),
+    BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Events"),
     BottomNavigationBarItem(
         icon: Icon(Icons.check_circle_outline), label: "Done"),
     BottomNavigationBarItem(
@@ -35,7 +35,7 @@ class TodoLayoutController extends GetxController {
     ),
   ];
 
-  final appbar_title = ["New Tasks", "Done Tasks", "Archive Tasks"];
+  final appbar_title = ["My Events", "Done Events", "Archive Events"];
 
   TodoDbHelper dbHelper = TodoDbHelper.db;
 
@@ -45,18 +45,18 @@ class TodoLayoutController extends GetxController {
   void onInit() async {
     await dbHelper.createDatabase();
     await getDatabasesPath().then((value) => print(value + "/todo.db"));
-    await getalltasks();
-    print(_newtask.length);
+    await getallevents();
+    print(_neweventList.length);
     super.onInit();
   }
 
-// Future<List<Map>> insertTaskToDatabase(
+// Future<List<Map>> inserteventToDatabase(
 //       {required String title,
 //       required String date,
 //       required String time}) async {
 //     database.transaction((txn) => txn
 //             .rawInsert(
-//                 'insert into $taskTable(title,date,time,status) values("$title","$date","$time","new")')
+//                 'insert into $eventTable(title,date,time,status) values("$title","$date","$time","new")')
 //             .then((value) async {
 //           print('inserted successfully');
 //         }).catchError((error) {
@@ -69,7 +69,7 @@ class TodoLayoutController extends GetxController {
 // NOTE on select date in time line
   void onchangeselectedate(selecteddate) {
     currentSelectedDate = selecteddate;
-    getalltasks();
+    getallevents();
   }
 
 //NOTE on change remind list
@@ -78,35 +78,36 @@ class TodoLayoutController extends GetxController {
     selectedRemindItem.value = value;
   }
 
-  Future<void> getalltasks() async {
+  Future<void> getallevents() async {
     print(isloading.value);
-    _newtask = [];
-    _donetask = [];
-    _archivetask = [];
+    _neweventList = [];
+    _doneeventList = [];
+    _archiveeventList = [];
     isloading.value = true;
     await dbHelper.database
-        .rawQuery("select * from tasks where date='${currentSelectedDate}'")
+        .rawQuery(
+            "select * from $eventTable where date='${currentSelectedDate}'")
         .then((value) {
       value.forEach((element) {
         if (element['status'] == "new")
-          _newtask.add(Task.fromJson(element));
+          _neweventList.add(Event.fromJson(element));
         else if (element['status'] == "done")
-          _donetask.add(Task.fromJson(element));
+          _doneeventList.add(Event.fromJson(element));
         else if (element['status'] == "archive")
-          _archivetask.add(Task.fromJson(element));
+          _archiveeventList.add(Event.fromJson(element));
       });
-      _newtask.length > 1
-          //NOTE if does not have any new task
-          ? _newtask.sort((a, b) {
+      _neweventList.length > 1
+          //NOTE if does not have any new event
+          ? _neweventList.sort((a, b) {
               return DateTime.parse(a.date.toString() + " " + a.time.toString())
                   .compareTo(DateTime.parse(
                       b.date.toString() + " " + b.time.toString()));
             })
           : [];
 
-      // print("N  " + _newtaskMap.length.toString());
-      // print("D  " + _donetaskMap.length.toString());
-      // print("A  " + _archivetaskMap.length.toString());
+      // print("N  " + _neweventListMap.length.toString());
+      // print("D  " + _doneeventListMap.length.toString());
+      // print("A  " + _archiveeventListMap.length.toString());
     }).then((value) {
       isloading.value = false;
       print(isloading.value);
@@ -120,21 +121,21 @@ class TodoLayoutController extends GetxController {
     update();
   }
 
-//  add task by model
-  Future<int> insertTaskByModel({required Task model}) async {
+//  add event by model
+  Future<int> inserteventByModel({required Event model}) async {
     var dbclient = await dbHelper.database;
     //! if i need random id
     // var uuid = Uuid();
     // model.id = uuid.v1();
     // print(model.toJson());
-    int id = await dbclient.insert(taskTable, model.toJson());
+    int id = await dbclient.insert(eventTable, model.toJson());
     await dbHelper.database
-        .rawQuery("select * from tasks where id='${id}'")
+        .rawQuery("select * from $eventTable where id='${id}'")
         .then((value) {
       value.forEach((element) {
-        _newtask.add(Task.fromJson(element));
+        _neweventList.add(Event.fromJson(element));
         // order by date time
-        _newtask.sort((a, b) {
+        _neweventList.sort((a, b) {
           return DateTime.parse(a.date.toString() + " " + a.time.toString())
               .compareTo(
                   DateTime.parse(b.date.toString() + " " + b.time.toString()));
@@ -145,31 +146,33 @@ class TodoLayoutController extends GetxController {
     return id;
   }
 
-  updatestatusTask({required String taskId, required String status}) async {
+  updatestatusevent({required String eventId, required String status}) async {
     var dbclient = await dbHelper.database;
     await dbclient
         .rawUpdate(
-            "UPDATE  $taskTable SET status= '$status' where  id='$taskId'")
+            "UPDATE  $eventTable SET status= '$status' where  id='$eventId'")
         .then((value) {
       // NOTE if current index ==0 i have two option done or archive
       if (currentIndex == 0) {
-        Task task = _newtask.where((element) => element.id == taskId).first;
-        if (!task.isBlank!) _newtask.remove(task);
+        Event event =
+            _neweventList.where((element) => element.id == eventId).first;
+        if (!event.isBlank!) _neweventList.remove(event);
         if (status == "done") {
-          task.status = "done";
-          _donetask.add(task);
+          event.status = "done";
+          _doneeventList.add(event);
         } else {
-          task.status = "archive";
-          _archivetask.add(task);
+          event.status = "archive";
+          _archiveeventList.add(event);
         }
       }
       // NOTE if current index ==1 i have one option archive
       if (currentIndex == 1) {
-        Task task = _donetask.where((element) => element.id == taskId).first;
+        Event event =
+            _doneeventList.where((element) => element.id == eventId).first;
         // NOTE if exist remove it from _done and add to archive and update her status in archive
-        if (!task.isBlank!) _donetask.remove(task);
-        task.status = "archive";
-        _archivetask.add(task);
+        if (!event.isBlank!) _doneeventList.remove(event);
+        event.status = "archive";
+        _archiveeventList.add(event);
       }
 
       update();
@@ -181,31 +184,35 @@ class TodoLayoutController extends GetxController {
     //getalltasks();
   }
 
-  deleteTask({required String taskId}) async {
+  deleteEvent({required String eventId}) async {
     var dbclient = await dbHelper.database;
     await dbclient
-        .rawDelete("DELETE FROM  $taskTable where  id='$taskId'")
+        .rawDelete("DELETE FROM  $eventTable where  id='$eventId'")
         .then((value) {
-      //NOTE if i am in new task screen
+      //NOTE if i am in new event
+      // screen
       if (currentIndex == 0) {
-        Task newtask = _newtask.where((element) => element.id == taskId).first;
-        //NOTE check if new task contain taskId
-        if (!newtask.isBlank!) _newtask.remove(newtask);
+        Event event =
+            _neweventList.where((element) => element.id == eventId).first;
+        //NOTE check if new event contain eventId
+        if (!event.isBlank!) _neweventList.remove(event);
       }
 
-      //NOTE if i am in done task screen
+      //NOTE if i am in done event
+      // screen
       if (currentIndex == 1) {
-        Task donetask =
-            _donetask.where((element) => element.id == taskId).first;
-        //NOTE check if done task contain taskId
-        if (!donetask.isBlank!) _donetask.remove(donetask);
+        Event event =
+            _doneeventList.where((element) => element.id == eventId).first;
+        //NOTE check if done event contain eventId
+        if (!event.isBlank!) _doneeventList.remove(event);
       }
-      //NOTE if i am in Archive task screen
+      //NOTE if i am in Archive event
+      // screen
       if (currentIndex == 2) {
-        Task archivetask =
-            _archivetask.where((element) => element.id == taskId).first;
-        //NOTE check if done task contain taskId
-        if (!archivetask.isBlank!) _archivetask.remove(archivetask);
+        Event event =
+            _archiveeventList.where((element) => element.id == eventId).first;
+        //NOTE check if done event contain eventId
+        if (!event.isBlank!) _archiveeventList.remove(event);
       }
       update();
     }).catchError((error) {
