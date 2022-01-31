@@ -4,13 +4,14 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 class NotifcationApi {
-  static final _notifications = FlutterLocalNotificationsPlugin();
+  static var _notifications;
   static String? selectedNotificationPayload;
 
   static late AndroidInitializationSettings initializationSettingsAndroid;
   static late InitializationSettings initializationSettings;
 
   static Future init() async {
+    _notifications = FlutterLocalNotificationsPlugin();
     initializationSettingsAndroid = AndroidInitializationSettings("flutter");
     initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
