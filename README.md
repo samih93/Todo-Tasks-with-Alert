@@ -1,4 +1,4 @@
-# Todo tasks with local notification for each task 
+# Todo Event Or Tasks with local notification for each Event 
 
 
 
