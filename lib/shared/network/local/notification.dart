@@ -3,19 +3,19 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
-class NotifcationApi {
-  static var _notifications;
+class NotificationApi {
+  static var notifications;
   static String? selectedNotificationPayload;
 
   static late AndroidInitializationSettings initializationSettingsAndroid;
   static late InitializationSettings initializationSettings;
 
   static Future init() async {
-    _notifications = FlutterLocalNotificationsPlugin();
-    initializationSettingsAndroid = AndroidInitializationSettings("flutter");
-    initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-    );
+    notifications = FlutterLocalNotificationsPlugin();
+    // initializationSettingsAndroid = AndroidInitializationSettings("flutter");
+    // initializationSettings = InitializationSettings(
+    //   android: initializationSettingsAndroid,
+    // );
     tz.initializeTimeZones();
   }
 
@@ -34,21 +34,22 @@ class NotifcationApi {
 
   static Future shownotification(
       {int id = 0, String? title, String? body, String? payload}) async {
-    await _notifications.initialize(initializationSettings,
+    await notifications.initialize(initializationSettings,
         onSelectNotification: (String? payload) async {
       if (payload != null) {
         debugPrint('notification payload: $payload');
       }
       selectedNotificationPayload = payload;
     });
-    _notifications.show(
+    notifications.show(
         id, title, body, await _notificationDetails("channel Id"),
         payload: payload);
   }
 
   static Future scheduleNotification(DateTime scheduleDate,
       String taskChannelId, String title, String time) async {
-    await _notifications.zonedSchedule(
+    notifications = FlutterLocalNotificationsPlugin();
+    await notifications.zonedSchedule(
         0,
         title,
         "You have a Task ToDo At " + time,
