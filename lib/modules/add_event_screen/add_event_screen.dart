@@ -198,7 +198,7 @@ class AddEventScreen extends StatelessWidget {
                                   .then((eventId) {
                                 print("eventId " + eventId.toString());
                                 //NOTE set Notification for event
-                                NotifcationApi.scheduleNotification(
+                                NotificationApi.scheduleNotification(
                                     DateTime.parse(datecontroller.text +
                                             " " +
                                             time.toString())
