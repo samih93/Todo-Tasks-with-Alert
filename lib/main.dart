@@ -14,7 +14,7 @@ void main() async {
 //
   await NotificationApi.init();
   NotificationApi.initializationSettingsAndroid =
-      AndroidInitializationSettings("drawable/flutter");
+      AndroidInitializationSettings("drawable/launcher_icon");
   NotificationApi.initializationSettings = InitializationSettings(
     android: NotificationApi.initializationSettingsAndroid,
   );
