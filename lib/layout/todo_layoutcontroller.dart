@@ -100,9 +100,9 @@ class TodoLayoutController extends GetxController {
       _neweventList.length > 1
           //NOTE if does not have any new event
           ? _neweventList.sort((a, b) {
-              return DateTime.parse(b.date.toString() + " " + b.time.toString())
+              return DateTime.parse(a.date.toString() + " " + a.time.toString())
                   .compareTo(DateTime.parse(
-                      a.date.toString() + " " + a.time.toString()));
+                      b.date.toString() + " " + b.time.toString()));
             })
           : [];
 
