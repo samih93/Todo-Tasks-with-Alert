@@ -9,6 +9,7 @@ import 'package:todo_tasks_with_alert/modules/my_events/my_event_screen.dart';
 import 'package:todo_tasks_with_alert/shared/componets/constants.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/TodoDbHelper.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/cashhelper.dart';
+import 'package:todo_tasks_with_alert/shared/network/local/notification.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
 import 'package:uuid/uuid.dart';
 
@@ -99,9 +100,9 @@ class TodoLayoutController extends GetxController {
       _neweventList.length > 1
           //NOTE if does not have any new event
           ? _neweventList.sort((a, b) {
-              return DateTime.parse(a.date.toString() + " " + a.time.toString())
+              return DateTime.parse(b.date.toString() + " " + b.time.toString())
                   .compareTo(DateTime.parse(
-                      b.date.toString() + " " + b.time.toString()));
+                      a.date.toString() + " " + a.time.toString()));
             })
           : [];
 
@@ -133,7 +134,9 @@ class TodoLayoutController extends GetxController {
         .rawQuery("select * from $eventTable where id='${id}'")
         .then((value) {
       value.forEach((element) {
-        _neweventList.add(Event.fromJson(element));
+        if (DateTime.parse(model.date.toString())
+                .compareTo(DateTime.parse(currentSelectedDate.toString())) ==
+            0) _neweventList.add(Event.fromJson(element));
         // order by date time
         _neweventList.sort((a, b) {
           return DateTime.parse(a.date.toString() + " " + a.time.toString())
@@ -188,7 +191,7 @@ class TodoLayoutController extends GetxController {
     var dbclient = await dbHelper.database;
     await dbclient
         .rawDelete("DELETE FROM  $eventTable where  id='$eventId'")
-        .then((value) {
+        .then((value) async {
       //NOTE if i am in new event
       // screen
       if (currentIndex == 0) {
@@ -214,6 +217,8 @@ class TodoLayoutController extends GetxController {
         //NOTE check if done event contain eventId
         if (!event.isBlank!) _archiveeventList.remove(event);
       }
+      // to delete scheduled notification for this event
+      await NotificationApi.notifications.cancel(int.parse(eventId));
       update();
     }).catchError((error) {
       print(error.toString());

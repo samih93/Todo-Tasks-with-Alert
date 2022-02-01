@@ -130,19 +130,19 @@ class TodoLayout extends StatelessWidget {
           style: Theme.of(context).textTheme.headline5,
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              // NotifcationApi().shownotification(
-              //     title: "Hello from samih",
-              //     body: "hello everybody today i will teach u ecer");
-              // print(DateTime.parse("2022-01-28 13:27:00"));
-              NotifcationApi.shownotification();
-            },
-            icon: Icon(
-              Get.isDarkMode ? Icons.search : Icons.search,
-              size: 30,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     // NotifcationApi().shownotification(
+          //     //     title: "Hello from samih",
+          //     //     body: "hello everybody today i will teach u ecer");
+          //     // print(DateTime.parse("2022-01-28 13:27:00"));
+          //     NotificationApi.shownotification();
+          //   },
+          //   icon: Icon(
+          //     Get.isDarkMode ? Icons.search : Icons.search,
+          //     size: 30,
+          //   ),
+          // ),
           IconButton(
             onPressed: () {
               todocontroller.onchangeThem();
