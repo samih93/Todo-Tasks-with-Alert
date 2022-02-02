@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:todo_tasks_with_alert/model/event.dart';
-import 'package:todo_tasks_with_alert/model/event_metting_data_source.dart';
 import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
 
 class SearchEvents extends StatelessWidget {

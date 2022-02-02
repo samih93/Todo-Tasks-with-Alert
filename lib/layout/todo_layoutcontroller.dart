@@ -45,7 +45,7 @@ class TodoLayoutController extends GetxController {
   @override
   void onInit() async {
     await dbHelper.createDatabase();
-    await getDatabasesPath().then((value) => print(value + "/todo.db"));
+    await getDatabasesPath().then((value) => print(value + "/event.db"));
     await getalleventsInDay();
     print(_neweventList.length);
     super.onInit();

@@ -1,5 +1,5 @@
 class Event {
-  late String id, title, date, time, status;
+  late String id, title, date, time, endtime, status;
   late int remind;
   Event(
       {required this.title,
@@ -9,7 +9,7 @@ class Event {
       required this.remind});
 
   Event.CustomConstructor(
-      {required String title, required DateTime start, required DateTime end});
+      {required String title, required this.time, required this.endtime});
 
   Event.fromJson(Map<dynamic, dynamic> map) {
     if (map == null) return;

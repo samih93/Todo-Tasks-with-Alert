@@ -131,15 +131,15 @@ class TodoLayout extends StatelessWidget {
           style: Theme.of(context).textTheme.headline5,
         ),
         actions: [
-          // IconButton(
-          //   onPressed: () {
-          //     Get.to(() => SearchEvents());
-          //   },
-          //   icon: Icon(
-          //     Get.isDarkMode ? Icons.search : Icons.search,
-          //     size: 30,
-          //   ),
-          // ),
+          IconButton(
+            onPressed: () {
+              Get.to(() => SearchEvents());
+            },
+            icon: Icon(
+              Get.isDarkMode ? Icons.search : Icons.search,
+              size: 30,
+            ),
+          ),
           IconButton(
             onPressed: () {
               todocontroller.onchangeThem();
