@@ -46,7 +46,7 @@ class TodoLayoutController extends GetxController {
   void onInit() async {
     await dbHelper.createDatabase();
     await getDatabasesPath().then((value) => print(value + "/todo.db"));
-    await getallevents();
+    await getalleventsInDay();
     print(_neweventList.length);
     super.onInit();
   }
@@ -70,7 +70,7 @@ class TodoLayoutController extends GetxController {
 // NOTE on select date in time line
   void onchangeselectedate(selecteddate) {
     currentSelectedDate = selecteddate;
-    getallevents();
+    getalleventsInDay();
   }
 
 //NOTE on change remind list
@@ -79,7 +79,7 @@ class TodoLayoutController extends GetxController {
     selectedRemindItem.value = value;
   }
 
-  Future<void> getallevents() async {
+  Future<void> getalleventsInDay() async {
     print(isloading.value);
     _neweventList = [];
     _doneeventList = [];

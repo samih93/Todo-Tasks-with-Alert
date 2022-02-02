@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
 import 'package:todo_tasks_with_alert/model/event.dart';
 import 'package:todo_tasks_with_alert/modules/add_event_screen/add_event_screen.dart';
+import 'package:todo_tasks_with_alert/modules/search_events/search_events.dart';
 import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/notification.dart';
@@ -132,11 +133,7 @@ class TodoLayout extends StatelessWidget {
         actions: [
           // IconButton(
           //   onPressed: () {
-          //     // NotifcationApi().shownotification(
-          //     //     title: "Hello from samih",
-          //     //     body: "hello everybody today i will teach u ecer");
-          //     // print(DateTime.parse("2022-01-28 13:27:00"));
-          //     NotificationApi.shownotification();
+          //     Get.to(() => SearchEvents());
           //   },
           //   icon: Icon(
           //     Get.isDarkMode ? Icons.search : Icons.search,

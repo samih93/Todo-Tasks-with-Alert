@@ -8,6 +8,9 @@ class Event {
       required this.status,
       required this.remind});
 
+  Event.CustomConstructor(
+      {required String title, required DateTime start, required DateTime end});
+
   Event.fromJson(Map<dynamic, dynamic> map) {
     if (map == null) return;
 

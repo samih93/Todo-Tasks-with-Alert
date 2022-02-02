@@ -37,6 +37,7 @@ dependencies:
   flutter_staggered_animations: ^1.0.0
   flutter_local_notifications: ^9.2.0
   flutter_svg: ^1.0.3
+  syncfusion_flutter_calendar: ^19.4.48 
 
   flutter:
     sdk: flutter
