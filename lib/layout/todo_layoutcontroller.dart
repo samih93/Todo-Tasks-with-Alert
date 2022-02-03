@@ -154,7 +154,7 @@ class TodoLayoutController extends GetxController {
     await dbclient
         .rawUpdate(
             "UPDATE  $eventTable SET status= '$status' where  id='$eventId'")
-        .then((value) {
+        .then((value) async {
       // NOTE if current index ==0 i have two option done or archive
       if (currentIndex == 0) {
         Event event =
@@ -167,6 +167,8 @@ class TodoLayoutController extends GetxController {
           event.status = "archive";
           _archiveeventList.add(event);
         }
+        //NOTE cancel notification if archived or finished
+        await NotificationApi.notifications.cancel(int.parse(eventId));
       }
       // NOTE if current index ==1 i have one option archive
       if (currentIndex == 1) {
@@ -174,8 +176,12 @@ class TodoLayoutController extends GetxController {
             _doneeventList.where((element) => element.id == eventId).first;
         // NOTE if exist remove it from _done and add to archive and update her status in archive
         if (!event.isBlank!) _doneeventList.remove(event);
+
         event.status = "archive";
         _archiveeventList.add(event);
+
+        //NOTE cancel notification if archived
+        await NotificationApi.notifications.cancel(int.parse(eventId));
       }
 
       update();

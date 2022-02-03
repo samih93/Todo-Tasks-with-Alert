@@ -133,7 +133,9 @@ class TodoLayout extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
+              //TODO: search screen
               Get.to(() => SearchEvents());
+              //NotificationApi.shownotification();
             },
             icon: Icon(
               Get.isDarkMode ? Icons.search : Icons.search,

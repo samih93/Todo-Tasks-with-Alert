@@ -46,11 +46,11 @@ class NotificationApi {
         payload: payload);
   }
 
-  static Future scheduleNotification(DateTime scheduleDate,
-      String taskChannelId, String title, String time) async {
+  static Future scheduleNotification(
+      DateTime scheduleDate, taskChannelId, String title, String time) async {
     notifications = FlutterLocalNotificationsPlugin();
     await notifications.zonedSchedule(
-        0,
+        taskChannelId,
         title,
         "You have a Task ToDo At " + time,
         await tz.TZDateTime.from(scheduleDate, tz.local),

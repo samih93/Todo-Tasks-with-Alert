@@ -205,7 +205,7 @@ class AddEventScreen extends StatelessWidget {
                                         .subtract(Duration(
                                             minutes: int.parse(todocontroller
                                                 .selectedRemindItem.value))),
-                                    eventId.toString(),
+                                    eventId,
                                     titlecontroller.text,
                                     timecontroller.text);
                                 titlecontroller.text = "";
