@@ -11,13 +11,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CashHelper.init();
 
-//
+// NOTE Notification
   await NotificationApi.init();
-  NotificationApi.initializationSettingsAndroid =
-      AndroidInitializationSettings("launcher_icon");
-  NotificationApi.initializationSettings = InitializationSettings(
-    android: NotificationApi.initializationSettingsAndroid,
-  );
 
   // NOTE check cash theme and set it to Get
   bool? isdarkcashedthem = CashHelper.getThem(key: "isdark");

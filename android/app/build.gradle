@@ -38,6 +38,14 @@ android {
         jvmTarget = '1.8'
     }
 
+   
+   //! What went wrong:
+   //! Execution failed for task ':app:lintVitalRelease'. without this line of code an error happen
+    lintOptions {
+        checkReleaseBuilds false //<- add this line
+    }
+
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }

@@ -10,12 +10,21 @@ class NotificationApi {
   static late AndroidInitializationSettings initializationSettingsAndroid;
   static late InitializationSettings initializationSettings;
 
+//NOTE initialize notification
   static Future init() async {
     notifications = FlutterLocalNotificationsPlugin();
-    // initializationSettingsAndroid = AndroidInitializationSettings("flutter");
-    // initializationSettings = InitializationSettings(
-    //   android: initializationSettingsAndroid,
-    // );
+    initializationSettingsAndroid =
+        AndroidInitializationSettings("@mipmap/launcher_icon");
+    initializationSettings = InitializationSettings(
+      android: NotificationApi.initializationSettingsAndroid,
+    );
+    await notifications.initialize(initializationSettings,
+        onSelectNotification: (String? payload) async {
+      if (payload != null) {
+        debugPrint('notification payload: $payload');
+      }
+      selectedNotificationPayload = payload;
+    });
     tz.initializeTimeZones();
   }
 
@@ -34,13 +43,6 @@ class NotificationApi {
 
   static Future shownotification(
       {int id = 0, String? title, String? body, String? payload}) async {
-    await notifications.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
-      if (payload != null) {
-        debugPrint('notification payload: $payload');
-      }
-      selectedNotificationPayload = payload;
-    });
     notifications.show(
         id, title, body, await _notificationDetails("channel Id"),
         payload: payload);
@@ -52,7 +54,7 @@ class NotificationApi {
     await notifications.zonedSchedule(
         taskChannelId,
         title,
-        "You have a Task ToDo At " + time,
+        "You have a Event At  " + time,
         await tz.TZDateTime.from(scheduleDate, tz.local),
         await _notificationDetails(taskChannelId),
         androidAllowWhileIdle: true,
