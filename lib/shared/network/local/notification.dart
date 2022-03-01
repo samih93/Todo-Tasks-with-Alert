@@ -18,13 +18,7 @@ class NotificationApi {
     initializationSettings = InitializationSettings(
       android: NotificationApi.initializationSettingsAndroid,
     );
-    await notifications.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
-      if (payload != null) {
-        debugPrint('notification payload: $payload');
-      }
-      selectedNotificationPayload = payload;
-    });
+
     tz.initializeTimeZones();
   }
 
@@ -51,6 +45,19 @@ class NotificationApi {
   static Future scheduleNotification(
       DateTime scheduleDate, taskChannelId, String title, String time) async {
     notifications = FlutterLocalNotificationsPlugin();
+    await notifications.initialize(initializationSettings,
+        onSelectNotification: (String? payload) async {
+      if (payload != null) {
+        debugPrint('notification payload: $payload');
+      }
+      //
+      selectedNotificationPayload = taskChannelId.toString();
+      print('payload :' + selectedNotificationPayload.toString());
+      //NOTE when click on notification i cancel it cz it remind every day same time
+      // to delete scheduled notification for this event
+      await NotificationApi.notifications
+          .cancel(int.parse(selectedNotificationPayload.toString()));
+    });
     await notifications.zonedSchedule(
         taskChannelId,
         title,
