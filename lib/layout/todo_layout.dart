@@ -21,6 +21,7 @@ class TodoLayout extends StatelessWidget {
     return GetBuilder<TodoLayoutController>(
       init: Get.find<TodoLayoutController>(),
       builder: (todocontroller) => Scaffold(
+        drawer: _drawer(context),
         key: _scaffoldkey,
         // NOTE App Bar
         appBar: _appbar(todocontroller, context),
@@ -155,5 +156,60 @@ class TodoLayout extends StatelessWidget {
             width: 20,
           )
         ],
+      );
+
+  _drawer(BuildContext context) => Drawer(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 10, right: 10, top: 40),
+              height: MediaQuery.of(context).size.height * 0.2,
+              color: defaultLightColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                            backgroundImage:
+                                AssetImage('assets/default profile.png')),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Spacer(),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.cloud),
+                          color: Colors.grey.shade200,
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    "Sign In",
+                    style: TextStyle(
+                        letterSpacing: 2, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: Icon(Icons.delete),
+              title: Text("Delete All Data"),
+            ),
+            Divider(),
+            ListTile(
+              onTap: () {},
+              leading: Icon(Icons.search),
+              title: Text("Search"),
+            ),
+          ],
+        ),
       );
 }
