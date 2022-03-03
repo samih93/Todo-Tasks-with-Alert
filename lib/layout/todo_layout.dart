@@ -162,7 +162,7 @@ class TodoLayout extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(left: 10, right: 10, top: 40),
+              padding: EdgeInsets.only(left: 15, right: 15, top: 40),
               height: MediaQuery.of(context).size.height * 0.2,
               color: defaultLightColor,
               child: Column(
@@ -191,9 +191,12 @@ class TodoLayout extends StatelessWidget {
                     height: 15,
                   ),
                   Text(
-                    "Sign In",
+                    "SIGN IN",
                     style: TextStyle(
                         letterSpacing: 2, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Synchronization disabled...",
                   ),
                 ],
               ),
