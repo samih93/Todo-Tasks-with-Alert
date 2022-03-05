@@ -11,7 +11,7 @@ class SearchEvents extends StatelessWidget {
         appBar: AppBar(
           title: defaultTextFormField(
               controller: _searchController,
-              text: "Search for a event",
+              hinttext: "Search for a event",
               inputtype: TextInputType.name,
               border: InputBorder.none,
               onchange: (value) {}),
@@ -21,6 +21,9 @@ class SearchEvents extends StatelessWidget {
           firstDayOfWeek: 1,
           monthViewSettings: const MonthViewSettings(
               appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
+          onTap: (CalendarTapDetails calendarTapDetails) {
+            print(calendarTapDetails.date.toString());
+          },
         ));
   }
 }
