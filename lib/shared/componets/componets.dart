@@ -26,9 +26,8 @@ Widget buildEventItem(Event task, BuildContext context) =>
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: defaultLightColor,
-                    ),
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: orangeGradient),
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
@@ -281,6 +280,7 @@ Widget defaultButton(
         required String text,
         double radius = 0,
         double height = 40,
+        LinearGradient? gradient,
         bool? isUppercase}) =>
     Container(
       width: width,
@@ -295,7 +295,7 @@ Widget defaultButton(
         ),
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
-        color: background,
-      ),
+          borderRadius: BorderRadius.circular(radius),
+          color: background,
+          gradient: gradient),
     );

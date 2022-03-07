@@ -35,9 +35,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       //NOTE to use 24 hour format
-      // builder: (context, child) => MediaQuery(
-      //     data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-      //     child: child!),
+      builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!),
       debugShowCheckedModeBanner: false,
       theme: Themes.lightTheme,
       darkTheme: Themes.darkThem,

@@ -11,6 +11,7 @@ String getDateFormated(String date) {
 }
 
 
+
 // NOTE: style
 /// NAME         SIZE  WEIGHT  SPACING
 /// headline1    96.0  light   -1.5

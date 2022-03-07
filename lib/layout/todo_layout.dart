@@ -68,7 +68,7 @@ class TodoLayout extends StatelessWidget {
                               onpress: () {
                                 Get.to(() => AddEventScreen());
                               },
-                              background: defaultLightColor,
+                              gradient: orangeGradient,
                               radius: 15),
                         ],
                       ),
@@ -162,9 +162,9 @@ class TodoLayout extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              decoration: BoxDecoration(gradient: orangeGradient),
               padding: EdgeInsets.only(left: 15, right: 15, top: 40),
               height: MediaQuery.of(context).size.height * 0.2,
-              color: defaultLightColor,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
