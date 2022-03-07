@@ -77,7 +77,7 @@ Widget buildEventItem(Event task, BuildContext context) =>
                               SizedBox(width: 10),
                               //NOTE 24 hours to am pm
                               Text(
-                                "${DateFormat("h:mm a").format(DateTime.parse("2022-10-10 " + task.starttime.toString())).toString()}",
+                                "${DateFormat("h:mm a").format(DateTime.parse("2022-10-10 " + task.starttime.toString())).toString()} - ${DateFormat("h:mm a").format(DateTime.parse("2022-10-10 " + task.endtime.toString())).toString()}",
                                 style: TextStyle(
                                     fontSize: 15, color: Colors.white),
                               ),

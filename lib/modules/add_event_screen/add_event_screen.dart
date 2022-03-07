@@ -233,7 +233,7 @@ class AddEventScreen extends StatelessWidget {
                 DateTime date2start = DateFormat("hh:mm a")
                     .parse(starttimecontroller.text.toString());
                 DateTime date2end = DateFormat("hh:mm a")
-                    .parse(starttimecontroller.text.toString());
+                    .parse(endtimecontroller.text.toString());
                 String starttime =
                     DateFormat("HH:mm").format(date2start).toString();
                 String endtime =
