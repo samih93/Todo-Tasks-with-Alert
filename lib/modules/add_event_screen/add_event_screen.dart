@@ -13,7 +13,8 @@ class AddEventScreen extends StatelessWidget {
 
   var titlecontroller = TextEditingController();
   var datecontroller = TextEditingController();
-  var timecontroller = TextEditingController();
+  var starttimecontroller = TextEditingController();
+  var endtimecontroller = TextEditingController();
   var remindcontroller = TextEditingController();
   List<int> remindList = [5, 10, 15, 20];
 
@@ -22,7 +23,7 @@ class AddEventScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: _appbar(),
       body: _buildFromAddTask(context),
     );
   }
@@ -30,7 +31,7 @@ class AddEventScreen extends StatelessWidget {
   _buildFromAddTask(BuildContext context) => SingleChildScrollView(
         reverse: true,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -87,29 +88,63 @@ class AddEventScreen extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      defaultTextFormField(
-                          readonly: true,
-                          controller: timecontroller,
-                          inputtype: TextInputType.number,
-                          prefixIcon: Icon(Icons.watch_later_outlined),
-                          ontap: () {
-                            showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now())
-                                .then((value) {
-                              timecontroller.text =
-                                  value!.format(context).toString();
-                              //! 1970-01-01 time selected:00.000
-                              // print(DateFormat("hh:mm a")
-                              //     .parse(timecontroller.text.toString()));
-                            });
-                          },
-                          onvalidate: (value) {
-                            if (value!.isEmpty) {
-                              return "time must not be empty";
-                            }
-                          },
-                          text: "time"),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: defaultTextFormField(
+                                readonly: true,
+                                controller: starttimecontroller,
+                                inputtype: TextInputType.number,
+                                prefixIcon: Icon(Icons.watch_later_outlined),
+                                ontap: () {
+                                  showTimePicker(
+                                          context: context,
+                                          initialTime: TimeOfDay.now())
+                                      .then((value) {
+                                    starttimecontroller.text =
+                                        value!.format(context).toString();
+                                    //! 1970-01-01 time selected:00.000
+                                    // print(DateFormat("hh:mm a")
+                                    //     .parse(timecontroller.text.toString()));
+                                  });
+                                },
+                                onvalidate: (value) {
+                                  if (value!.isEmpty) {
+                                    return "time must not be empty";
+                                  }
+                                },
+                                text: "time"),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: defaultTextFormField(
+                                readonly: true,
+                                controller: endtimecontroller,
+                                inputtype: TextInputType.number,
+                                prefixIcon: Icon(Icons.watch_later_outlined),
+                                ontap: () {
+                                  showTimePicker(
+                                          context: context,
+                                          initialTime: TimeOfDay.now())
+                                      .then((value) {
+                                    endtimecontroller.text =
+                                        value!.format(context).toString();
+                                    //! 1970-01-01 time selected:00.000
+                                    // print(DateFormat("hh:mm a")
+                                    //     .parse(timecontroller.text.toString()));
+                                  });
+                                },
+                                onvalidate: (value) {
+                                  if (value!.isEmpty) {
+                                    return "time must not be empty";
+                                  }
+                                },
+                                text: "time"),
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: 10,
                       ),
@@ -170,52 +205,52 @@ class AddEventScreen extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      defaultButton(
-                          text: 'Create Event',
-                          background: defaultLightColor,
-                          radius: 15,
-                          onpress: () async {
-                            if (_formkey.currentState!.validate()) {
-                              //NOTE  am pm to 24 hours
-                              DateTime date2 = DateFormat("hh:mm a").parse(
-                                  timecontroller.text
-                                      .toString()); // think this will work better for you
-                              String time =
-                                  DateFormat("HH:mm").format(date2).toString();
-                              await todocontroller
-                                  .inserteventByModel(
-                                      model: new Event(
-                                          title: titlecontroller.text,
-                                          date: datecontroller.text,
-                                          time: time,
-                                          status: "new",
-                                          remind: int.parse(todocontroller
-                                              .selectedRemindItem.value)))
-                                  // .insertTask(
-                                  //     title: titlecontroller.text,
-                                  //     date: datecontroller.text,
-                                  //     time: timecontroller.text)
-                                  .then((eventId) {
-                                print("eventId " + eventId.toString());
-                                //NOTE set Notification for event
-                                NotificationApi.scheduleNotification(
-                                    DateTime.parse(datecontroller.text +
-                                            " " +
-                                            time.toString())
-                                        .subtract(Duration(
-                                            minutes: int.parse(todocontroller
-                                                .selectedRemindItem.value))),
-                                    eventId,
-                                    titlecontroller.text,
-                                    timecontroller.text);
-                                titlecontroller.text = "";
-                                datecontroller.text = "";
-                                timecontroller.text = "";
+                      //   defaultButton(
+                      //       text: 'Create Event',
+                      //       background: defaultLightColor,
+                      //       radius: 15,
+                      //       onpress: () async {
+                      //         if (_formkey.currentState!.validate()) {
+                      //           //NOTE  am pm to 24 hours
+                      //           DateTime date2 = DateFormat("hh:mm a").parse(
+                      //               timecontroller.text
+                      //                   .toString()); // think this will work better for you
+                      //           String time =
+                      //               DateFormat("HH:mm").format(date2).toString();
+                      //           await todocontroller
+                      //               .inserteventByModel(
+                      //                   model: new Event(
+                      //                       title: titlecontroller.text,
+                      //                       date: datecontroller.text,
+                      //                       time: time,
+                      //                       status: "new",
+                      //                       remind: int.parse(todocontroller
+                      //                           .selectedRemindItem.value)))
+                      //               // .insertTask(
+                      //               //     title: titlecontroller.text,
+                      //               //     date: datecontroller.text,
+                      //               //     time: timecontroller.text)
+                      //               .then((eventId) {
+                      //             print("eventId " + eventId.toString());
+                      //             //NOTE set Notification for event
+                      //             NotificationApi.scheduleNotification(
+                      //                 DateTime.parse(datecontroller.text +
+                      //                         " " +
+                      //                         time.toString())
+                      //                     .subtract(Duration(
+                      //                         minutes: int.parse(todocontroller
+                      //                             .selectedRemindItem.value))),
+                      //                 eventId,
+                      //                 titlecontroller.text,
+                      //                 timecontroller.text);
+                      //             titlecontroller.text = "";
+                      //             datecontroller.text = "";
+                      //             timecontroller.text = "";
 
-                                Get.back();
-                              });
-                            }
-                          }),
+                      //             Get.back();
+                      //           });
+                      //         }
+                      //       }),
                     ],
                   ),
                 ),
@@ -224,4 +259,84 @@ class AddEventScreen extends StatelessWidget {
           ),
         ),
       );
+
+  _appbar() {
+    return AppBar(
+      backgroundColor: defaultLightColor,
+      leading: IconButton(
+          icon: Icon(
+            Icons.close,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Get.back();
+          }),
+      actions: [
+        TextButton(
+            onPressed: () async {
+              if (_formkey.currentState!.validate()) {
+                //NOTE  am pm to 24 hours
+                DateTime date2start = DateFormat("hh:mm a")
+                    .parse(starttimecontroller.text.toString());
+                DateTime date2end = DateFormat("hh:mm a")
+                    .parse(starttimecontroller.text.toString());
+                String starttime =
+                    DateFormat("HH:mm").format(date2start).toString();
+                String endtime =
+                    DateFormat("HH:mm").format(date2end).toString();
+                await todocontroller
+                    .inserteventByModel(
+                        model: new Event(
+                            title: titlecontroller.text,
+                            date: datecontroller.text,
+                            starttime: starttime,
+                            endtime: endtime,
+                            status: "new",
+                            remind: int.parse(
+                                todocontroller.selectedRemindItem.value)))
+                    // .insertTask(
+                    //     title: titlecontroller.text,
+                    //     date: datecontroller.text,
+                    //     time: timecontroller.text)
+                    .then((eventId) {
+                  print("eventId " + eventId.toString());
+                  //NOTE set Notification for event
+                  NotificationApi.scheduleNotification(
+                      DateTime.parse(
+                              datecontroller.text + " " + starttime.toString())
+                          .subtract(Duration(
+                              minutes: int.parse(
+                                  todocontroller.selectedRemindItem.value))),
+                      eventId,
+                      titlecontroller.text,
+                      starttimecontroller.text);
+                  titlecontroller.text = "";
+                  datecontroller.text = "";
+                  starttimecontroller.text = "";
+
+                  Get.back();
+                });
+              }
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.done,
+                  color: Colors.white,
+                ),
+                SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  "Save",
+                  style: TextStyle(color: Colors.white),
+                ),
+                SizedBox(
+                  width: 8,
+                )
+              ],
+            ))
+      ],
+    );
+  }
 }

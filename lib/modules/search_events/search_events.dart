@@ -49,15 +49,9 @@ class SearchEvents extends StatelessWidget {
                   print(calendarTapDetails.date.toString());
                 },
                 onViewChanged: (viewChangedDetails) {
-                  int year = viewChangedDetails
-                      .visibleDates[viewChangedDetails.visibleDates.length ~/ 2]
-                      .year;
                   int month = viewChangedDetails
                       .visibleDates[viewChangedDetails.visibleDates.length ~/ 2]
                       .month;
-                  int day = viewChangedDetails
-                      .visibleDates[viewChangedDetails.visibleDates.length ~/ 2]
-                      .day;
                 },
               ));
         });

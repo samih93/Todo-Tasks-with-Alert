@@ -11,7 +11,7 @@ class SearchController extends GetxController {
   var isloading = true.obs;
   TodoDbHelper dbHelper = TodoDbHelper.db;
 
-  Future<void> getalleventsInDay() async {
+  Future<void> getalleventsInMonth() async {
     print(isloading.value);
     _all_event = [];
     isloading.value = true;

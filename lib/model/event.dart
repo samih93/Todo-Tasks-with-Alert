@@ -1,15 +1,16 @@
 class Event {
-  late String id, title, date, time, endtime, status;
+  late String id, title, date, starttime, endtime, status;
   late int remind;
   Event(
       {required this.title,
       required this.date,
-      required this.time,
+      required this.starttime,
+      required this.endtime,
       required this.status,
       required this.remind});
 
   Event.CustomConstructor(
-      {required String title, required this.time, required this.endtime});
+      {required String title, required this.starttime, required this.endtime});
 
   Event.fromJson(Map<dynamic, dynamic> map) {
     if (map == null) return;
@@ -17,7 +18,8 @@ class Event {
     id = map['id'].toString();
     title = map['title'];
     date = map['date'];
-    time = map['time'];
+    starttime = map['starttime'];
+    endtime = map['endtime'];
     status = map['status'];
     remind = map['remind'];
   }
@@ -27,7 +29,8 @@ class Event {
       //   'id': id,
       'title': title,
       'date': date,
-      'time': time,
+      'starttime': starttime,
+      'endtime': endtime,
       'status': status,
       'remind': remind,
     };
