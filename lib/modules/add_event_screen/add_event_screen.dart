@@ -113,7 +113,7 @@ class AddEventScreen extends StatelessWidget {
                                     return "time must not be empty";
                                   }
                                 },
-                                text: "time"),
+                                text: "From"),
                           ),
                           SizedBox(
                             width: 5,
@@ -141,7 +141,7 @@ class AddEventScreen extends StatelessWidget {
                                     return "time must not be empty";
                                   }
                                 },
-                                text: "time"),
+                                text: "To"),
                           ),
                         ],
                       ),
@@ -205,52 +205,6 @@ class AddEventScreen extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      //   defaultButton(
-                      //       text: 'Create Event',
-                      //       background: defaultLightColor,
-                      //       radius: 15,
-                      //       onpress: () async {
-                      //         if (_formkey.currentState!.validate()) {
-                      //           //NOTE  am pm to 24 hours
-                      //           DateTime date2 = DateFormat("hh:mm a").parse(
-                      //               timecontroller.text
-                      //                   .toString()); // think this will work better for you
-                      //           String time =
-                      //               DateFormat("HH:mm").format(date2).toString();
-                      //           await todocontroller
-                      //               .inserteventByModel(
-                      //                   model: new Event(
-                      //                       title: titlecontroller.text,
-                      //                       date: datecontroller.text,
-                      //                       time: time,
-                      //                       status: "new",
-                      //                       remind: int.parse(todocontroller
-                      //                           .selectedRemindItem.value)))
-                      //               // .insertTask(
-                      //               //     title: titlecontroller.text,
-                      //               //     date: datecontroller.text,
-                      //               //     time: timecontroller.text)
-                      //               .then((eventId) {
-                      //             print("eventId " + eventId.toString());
-                      //             //NOTE set Notification for event
-                      //             NotificationApi.scheduleNotification(
-                      //                 DateTime.parse(datecontroller.text +
-                      //                         " " +
-                      //                         time.toString())
-                      //                     .subtract(Duration(
-                      //                         minutes: int.parse(todocontroller
-                      //                             .selectedRemindItem.value))),
-                      //                 eventId,
-                      //                 titlecontroller.text,
-                      //                 timecontroller.text);
-                      //             titlecontroller.text = "";
-                      //             datecontroller.text = "";
-                      //             timecontroller.text = "";
-
-                      //             Get.back();
-                      //           });
-                      //         }
-                      //       }),
                     ],
                   ),
                 ),
