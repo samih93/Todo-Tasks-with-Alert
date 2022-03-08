@@ -8,13 +8,13 @@ import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
 import 'package:todo_tasks_with_alert/shared/styles/styles.dart';
 
 class SearchEvents extends StatelessWidget {
-  List<String> list_of_menuItem = [
-    'Day',
-    'Week',
-    'Work Week',
-    'Month',
-    'Schedule'
-  ];
+  // List<String> list_of_menuItem = [
+  //   'Day',
+  //   'Week',
+  //   'Work Week',
+  //   'Month',
+  //   'Schedule'
+  // ];
   var searchController_needed = Get.put(SearchController());
 
   @override
