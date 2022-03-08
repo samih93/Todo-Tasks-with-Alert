@@ -11,27 +11,24 @@ class SearchController extends GetxController {
   var isloading = true.obs;
   TodoDbHelper dbHelper = TodoDbHelper.db;
 
-  Future<void> getalleventsInMonth() async {
+  @override
+  void onInit() async {
+    super.onInit();
+    getallevents().then((value) {});
+  }
+
+  Future<void> getallevents() async {
     print(isloading.value);
     _all_event = [];
     isloading.value = true;
-    await dbHelper.database
-        .rawQuery("select * from $eventTable where date=''")
-        .then((value) {
-      value.forEach((element) {});
-      // _neweventList.length > 1
-      //     //NOTE if does not have any new event
-      //     ? _neweventList.sort((a, b) {
-      //         return DateTime.parse(a.date.toString() + " " + a.time.toString())
-      //             .compareTo(DateTime.parse(
-      //                 b.date.toString() + " " + b.time.toString()));
-      //       })
-      //     : [];
+    await dbHelper.database.rawQuery("select * from $eventTable").then((value) {
+      value.forEach((element) {
+        all_event.add(Event.fromJson(element));
+      });
 
-      // print("N  " + _neweventListMap.length.toString());
-      // print("D  " + _doneeventListMap.length.toString());
-      // print("A  " + _archiveeventListMap.length.toString());
-    }).then((value) {
+      all_event.forEach((element) {
+        print(element.toJson());
+      });
       isloading.value = false;
       print(isloading.value);
       update();
