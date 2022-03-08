@@ -101,8 +101,10 @@ class AddEventScreen extends StatelessWidget {
                                           context: context,
                                           initialTime: TimeOfDay.now())
                                       .then((value) {
+                                    // print(value!.format(context).toString());
                                     starttimecontroller.text =
                                         value!.format(context).toString();
+                                    print(starttimecontroller.text);
                                     //! 1970-01-01 time selected:00.000
                                     // print(DateFormat("hh:mm a")
                                     //     .parse(timecontroller.text.toString()));
@@ -226,18 +228,23 @@ class AddEventScreen extends StatelessWidget {
             Get.back();
           }),
       actions: [
-        TextButton(
-            onPressed: () async {
-              if (_formkey.currentState!.validate()) {
-                //NOTE  am pm to 24 hours
-                DateTime date2start = DateFormat("hh:mm a")
-                    .parse(starttimecontroller.text.toString());
-                DateTime date2end = DateFormat("hh:mm a")
-                    .parse(endtimecontroller.text.toString());
-                String starttime =
-                    DateFormat("HH:mm").format(date2start).toString();
-                String endtime =
-                    DateFormat("HH:mm").format(date2end).toString();
+        ElevatedButton.icon(
+          onPressed: () async {
+            if (_formkey.currentState!.validate()) {
+              //NOTE  am pm to 24 hours
+              DateTime date2start = DateFormat("hh:mm a")
+                  .parse(starttimecontroller.text.toString());
+              DateTime date2end = DateFormat("hh:mm a")
+                  .parse(endtimecontroller.text.toString());
+              String starttime =
+                  DateFormat("HH:mm").format(date2start).toString();
+              String endtime = DateFormat("HH:mm").format(date2end).toString();
+
+              //NOTE compare two time
+              var format = DateFormat("HH:mm");
+              var start = format.parse(starttime);
+              var end = format.parse(endtime);
+              if (start.isBefore(end)) {
                 await todocontroller
                     .inserteventByModel(
                         model: new Event(
@@ -270,26 +277,21 @@ class AddEventScreen extends StatelessWidget {
 
                   Get.back();
                 });
+              } else {
+                Get.snackbar('an error occured',
+                    '"start Time"  Must be less then "end time"',
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: defaultLightColor,
+                    colorText: Colors.white);
               }
-            },
-            child: Row(
-              children: [
-                Icon(
-                  Icons.done,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 4,
-                ),
-                Text(
-                  "Save",
-                  style: TextStyle(color: Colors.white),
-                ),
-                SizedBox(
-                  width: 8,
-                )
-              ],
-            ))
+            }
+          },
+          icon: Icon(
+            Icons.done,
+            color: Colors.white,
+          ),
+          label: Text("Save"),
+        )
       ],
     );
   }
