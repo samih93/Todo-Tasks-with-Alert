@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:todo_tasks_with_alert/model/event.dart';
+import 'package:todo_tasks_with_alert/model/event_data_source.dart';
 import 'package:todo_tasks_with_alert/modules/search_events/search_controller.dart';
 import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
 import 'package:todo_tasks_with_alert/shared/styles/styles.dart';
@@ -32,6 +33,7 @@ class SearchEvents extends StatelessWidget {
                 // ],
               ),
               body: SfCalendar(
+                showDatePickerButton: true,
                 allowedViews: [
                   CalendarView.day,
                   CalendarView.week,
@@ -39,12 +41,12 @@ class SearchEvents extends StatelessWidget {
                   CalendarView.month,
                   CalendarView.schedule
                 ],
+                dataSource: EventDataSource(searchController.all_event),
                 view: CalendarView.month,
                 firstDayOfWeek: 1,
                 monthViewSettings: const MonthViewSettings(
-                    showAgenda: true,
-                    appointmentDisplayMode:
-                        MonthAppointmentDisplayMode.appointment),
+                  showAgenda: true,
+                ),
                 onTap: (CalendarTapDetails calendarTapDetails) {
                   print(calendarTapDetails.date.toString());
                 },
