@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
 import 'package:todo_tasks_with_alert/model/event.dart';
 import 'package:todo_tasks_with_alert/modules/add_event_screen/add_event_screen.dart';
+import 'package:todo_tasks_with_alert/modules/clear_data/clear_data.dart';
 import 'package:todo_tasks_with_alert/modules/search_events/search_events.dart';
 import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
@@ -164,7 +165,7 @@ class TodoLayout extends StatelessWidget {
             Container(
               decoration: BoxDecoration(gradient: orangeGradient),
               padding: EdgeInsets.only(left: 15, right: 15, top: 40),
-              height: MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.25,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,9 +203,11 @@ class TodoLayout extends StatelessWidget {
               ),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Get.to(ClearData());
+              },
               leading: Icon(Icons.delete),
-              title: Text("Delete All Data"),
+              title: Text("Clear Data"),
             ),
             Divider(),
             ListTile(

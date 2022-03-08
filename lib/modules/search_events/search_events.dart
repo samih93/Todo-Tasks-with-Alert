@@ -46,14 +46,17 @@ class SearchEvents extends StatelessWidget {
                 firstDayOfWeek: 1,
                 monthViewSettings: const MonthViewSettings(
                   showAgenda: true,
+                  // appointmentDisplayMode:
+                  //   MonthAppointmentDisplayMode.appointment
                 ),
                 onTap: (CalendarTapDetails calendarTapDetails) {
                   print(calendarTapDetails.date.toString());
                 },
                 onViewChanged: (viewChangedDetails) {
-                  int month = viewChangedDetails
-                      .visibleDates[viewChangedDetails.visibleDates.length ~/ 2]
-                      .month;
+                  //  print(viewChangedDetails.visibleDates);
+                  print(viewChangedDetails.visibleDates.first.toString() +
+                      " " +
+                      viewChangedDetails.visibleDates.last.toString());
                 },
               ));
         });

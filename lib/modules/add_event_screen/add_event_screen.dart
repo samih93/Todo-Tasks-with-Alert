@@ -165,7 +165,7 @@ class AddEventScreen extends StatelessWidget {
                           items: remindList
                               .map((e) => DropdownMenuItem<String>(
                                     value: e.toString(),
-                                    child: Text(e.toString()),
+                                    child: Text(e.toString() + " min early"),
                                   ))
                               .toList(),
                           onChanged: (value) {
