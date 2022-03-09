@@ -165,7 +165,7 @@ class TodoLayout extends StatelessWidget {
             Container(
               decoration: BoxDecoration(gradient: orangeGradient),
               padding: EdgeInsets.only(left: 15, right: 15, top: 40),
-              height: MediaQuery.of(context).size.height * 0.25,
+              height: 160,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -34,7 +34,7 @@ class _ClearDataState extends State<ClearData> {
                   width: 10,
                 ),
                 Text(
-                  "delete all event befor this date",
+                  "delete all events befor this date",
                   style: TextStyle(color: Colors.red),
                 ),
               ],
