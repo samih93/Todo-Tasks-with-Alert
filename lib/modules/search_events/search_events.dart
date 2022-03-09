@@ -15,7 +15,6 @@ class SearchEvents extends StatelessWidget {
   //   'Month',
   //   'Schedule'
   // ];
-  var searchController_needed = Get.put(SearchController());
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class SearchEvents extends StatelessWidget {
           return Scaffold(
               appBar: AppBar(
                 title: Text(
-                  'Event Calendar',
+                  'Events Calendar',
                   style: eventheaderStyle,
                 ),
                 // actions: [
@@ -45,18 +44,21 @@ class SearchEvents extends StatelessWidget {
                 view: CalendarView.month,
                 firstDayOfWeek: 1,
                 monthViewSettings: const MonthViewSettings(
-                  showAgenda: true,
-                  // appointmentDisplayMode:
-                  //   MonthAppointmentDisplayMode.appointment
-                ),
+                    showAgenda: true,
+                    //NOTE to show events title not dot
+                    appointmentDisplayMode:
+                        MonthAppointmentDisplayMode.appointment),
                 onTap: (CalendarTapDetails calendarTapDetails) {
                   print(calendarTapDetails.date.toString());
                 },
                 onViewChanged: (viewChangedDetails) {
                   //  print(viewChangedDetails.visibleDates);
-                  print(viewChangedDetails.visibleDates.first.toString() +
-                      " " +
-                      viewChangedDetails.visibleDates.last.toString());
+                  searchController.getallevents(
+                      firstVisibleDate: viewChangedDetails.visibleDates.first,
+                      lastVisibleDate: viewChangedDetails.visibleDates.last);
+                  // print(viewChangedDetails.visibleDates.first.toString() +
+                  //     " " +
+                  //     viewChangedDetails.visibleDates.last.toString());
                 },
               ));
         });

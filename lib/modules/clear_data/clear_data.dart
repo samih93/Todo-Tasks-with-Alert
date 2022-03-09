@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_tasks_with_alert/layout/todo_layout.dart';
 import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
 import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
@@ -55,8 +56,7 @@ class _ClearDataState extends State<ClearData> {
                       .then((value) {
                     //Todo: handle date to string
                     //print(DateFormat.yMMMd().format(value!));
-                    var tdate = value.toString().split(' ');
-                    datecontroller.text = tdate[0];
+                    datecontroller.text = value.toString().split(' ').first;
                   });
                 },
                 onvalidate: (value) {
@@ -72,23 +72,24 @@ class _ClearDataState extends State<ClearData> {
                 text: "Delete",
                 background: Colors.red,
                 onpress: () async {
-                  if (datecontroller.text.isEmpty) {
+                  if (datecontroller.text.isEmpty ||
+                      datecontroller.text.toString() == 'null') {
                     Get.snackbar('an error occured', 'Date must be not empty',
                         snackPosition: SnackPosition.BOTTOM,
                         backgroundColor: defaultLightColor,
                         colorText: Colors.white);
                   } else {
-                    // await todocontroller
-                    //     .deleteAllEventBefor(
-                    //         DateTime.parse(datecontroller.text.toString()))
-                    //     .then((value) {
-                    //   Get.snackbar('Events Deleted Successfully',
-                    //       'All events befor ${datecontroller.text} are Deleted',
-                    //       snackPosition: SnackPosition.BOTTOM,
-                    //       backgroundColor: Colors.green.shade600,
-                    //       colorText: Colors.white);
-                    //   Get.back();
-                    // });
+                    await todocontroller
+                        .deleteAllEventBefor(
+                            DateTime.parse(datecontroller.text.toString()))
+                        .then((value) {
+                      Get.back();
+                      Get.snackbar('Events Deleted Successfully',
+                          'All events befor ${datecontroller.text} are Deleted',
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.green.shade600,
+                          colorText: Colors.white);
+                    });
                   }
                 }),
           ],

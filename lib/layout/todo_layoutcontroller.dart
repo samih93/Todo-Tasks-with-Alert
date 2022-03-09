@@ -255,16 +255,14 @@ class TodoLayoutController extends GetxController {
     }
   }
 
-  // Future<void> deleteAllEventBefor(DateTime date) async {
-  //   var dbclient = await dbHelper.database;
-  //   await dbclient
-  //       .rawDelete(
-  //           "DELETE FROM  $eventTable where CAST(date AS Date)<${date.toString().split(' ').first}")
-  //       .then((value) {
-  //     print('events deleted');
-  //     getalleventsInDay();
-  //   }).catchError((error) {
-  //     print(error.toString());
-  //   });
-  // }
+  Future<void> deleteAllEventBefor(DateTime date) async {
+    var dbclient = await dbHelper.database;
+    await dbclient.rawDelete("DELETE FROM  $eventTable where date< ?",
+        ['${date.toString().split(' ').first}']).then((value) {
+      print('events deleted');
+      getalleventsInDay();
+    }).catchError((error) {
+      print(error.toString());
+    });
+  }
 }
