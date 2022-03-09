@@ -8,14 +8,6 @@ import 'package:todo_tasks_with_alert/shared/componets/componets.dart';
 import 'package:todo_tasks_with_alert/shared/styles/styles.dart';
 
 class SearchEvents extends StatelessWidget {
-  // List<String> list_of_menuItem = [
-  //   'Day',
-  //   'Week',
-  //   'Work Week',
-  //   'Month',
-  //   'Schedule'
-  // ];
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SearchController>(
@@ -36,7 +28,7 @@ class SearchEvents extends StatelessWidget {
                 allowedViews: [
                   CalendarView.day,
                   CalendarView.week,
-                  CalendarView.workWeek,
+                  // CalendarView.workWeek,
                   CalendarView.month,
                   CalendarView.schedule
                 ],
