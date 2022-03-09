@@ -49,14 +49,14 @@ class NotificationApi {
         onSelectNotification: (String? payload) async {
       if (payload != null) {
         debugPrint('notification payload: $payload');
+        selectedNotificationPayload = taskChannelId.toString().trim();
+        print('payload :' + selectedNotificationPayload.toString());
+        //NOTE when click on notification i cancel it cz it remind every day same time
+        // to delete scheduled notification for this event
+        await NotificationApi.notifications
+            .cancel(int.parse(selectedNotificationPayload.toString()));
       }
       //
-      selectedNotificationPayload = taskChannelId.toString().trim();
-      print('payload :' + selectedNotificationPayload.toString());
-      //NOTE when click on notification i cancel it cz it remind every day same time
-      // to delete scheduled notification for this event
-      await NotificationApi.notifications
-          .cancel(int.parse(selectedNotificationPayload.toString()));
     });
     await notifications.zonedSchedule(
         taskChannelId,
