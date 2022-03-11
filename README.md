@@ -1,6 +1,9 @@
 # Todo Events Or Tasks with local notification for each Event 
-# display events in Calendar 
+# Light/Dark Theme
+# Syncfusion Calendar 
 # handle your events like a pro
+# Getx State Management
+# SQFlite database 
 
 ![152295740-2080f7ae-02ba-4591-9043-a2862119d873](https://user-images.githubusercontent.com/78031951/157836464-a1379148-c077-4792-9d5a-bc7ed393262b.png)
 
