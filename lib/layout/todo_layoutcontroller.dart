@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -41,14 +42,34 @@ class TodoLayoutController extends GetxController {
   TodoDbHelper dbHelper = TodoDbHelper.db;
 
   var isloading = true.obs;
+  bool ishasdevicekey_in_cash = false;
 
   @override
   void onInit() async {
+    ishasdevicekey_in_cash = CashHelper.getData(key: "deviceToken") ?? false;
+
     await dbHelper.createDatabase();
     await getDatabasesPath().then((value) => print(value + "/event.db"));
     await getalleventsInDay();
     print(_neweventList.length);
+
     super.onInit();
+  }
+
+  @override
+  Future<void> onReady() async {
+    // TODO: implement onReady
+    devicetoken = await FirebaseMessaging.instance.getToken() ?? null;
+    print("token messaging -- " + devicetoken.toString());
+
+    //  NOTE check if token not set so i set it to used in fcm notification
+    if (devicetoken != null && ishasdevicekey_in_cash) {
+      CashHelper.saveData(key: "deviceToken", value: true);
+      print('token saved');
+    } else {
+      print("token already saved");
+    }
+    super.onReady();
   }
 
 // Future<List<Map>> inserteventToDatabase(

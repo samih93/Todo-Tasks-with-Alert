@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:todo_tasks_with_alert/shared/componets/constants.dart';
+import 'package:todo_tasks_with_alert/shared/network/remote/diohelper.dart';
 
 class NotificationApi {
   static var notifications;
@@ -48,13 +50,13 @@ class NotificationApi {
     await notifications.initialize(initializationSettings,
         onSelectNotification: (String? payload) async {
       if (payload != null) {
-        debugPrint('notification payload: $payload');
-        selectedNotificationPayload = taskChannelId.toString().trim();
-        print('payload :' + selectedNotificationPayload.toString());
-        //NOTE when click on notification i cancel it cz it remind every day same time
-        // to delete scheduled notification for this event
-        await NotificationApi.notifications
-            .cancel(int.parse(selectedNotificationPayload.toString()));
+        // debugPrint('notification payload: $payload');
+        // selectedNotificationPayload = taskChannelId.toString().trim();
+        // print('payload :' + selectedNotificationPayload.toString());
+        // //NOTE when click on notification i cancel it cz it remind every day same time
+        // // to delete scheduled notification for this event
+        // await NotificationApi.notifications
+        //     .cancel(int.parse(selectedNotificationPayload.toString()));
       }
       //
     });
@@ -68,5 +70,36 @@ class NotificationApi {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time);
+  }
+
+  // NOTE push notification when a friend like my post a new post
+  static void createNotification(
+      String title, DateTime scheduleDate, String time) {
+    DioHelper.postData(url: 'https://fcm.googleapis.com/fcm/send', data: {
+      "to": "$devicetoken",
+      "notification": {
+        "body": "see details",
+        "title": " Like Your post",
+        "sound": "default"
+      },
+      "android": {
+        "priortiy": "HIGH",
+        "notification": {
+          "notification_priority": "PRIORITY_MAX",
+          "sound": "default",
+          "default_vibrate_timings": true,
+          "default_light_settings": true
+        }
+      },
+      "data": {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "87",
+        "type": "order"
+      }
+    }).then((value) {
+      print("notification pushed");
+    }).catchError((error) {
+      print(error.toString());
+    });
   }
 }

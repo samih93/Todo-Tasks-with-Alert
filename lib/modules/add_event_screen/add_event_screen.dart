@@ -262,14 +262,22 @@ class AddEventScreen extends StatelessWidget {
                     .then((eventId) {
                   print("eventId " + eventId.toString());
                   //NOTE set Notification for event
-                  NotificationApi.scheduleNotification(
+                  // NotificationApi.scheduleNotification(
+                  //     DateTime.parse(
+                  //             datecontroller.text + " " + starttime.toString())
+                  //         .subtract(Duration(
+                  //             minutes: int.parse(
+                  //                 todocontroller.selectedRemindItem.value))),
+                  //     eventId,
+                  //     titlecontroller.text,
+                  //     starttimecontroller.text);
+                  NotificationApi.createNotification(
+                      titlecontroller.text,
                       DateTime.parse(
                               datecontroller.text + " " + starttime.toString())
                           .subtract(Duration(
                               minutes: int.parse(
                                   todocontroller.selectedRemindItem.value))),
-                      eventId,
-                      titlecontroller.text,
                       starttimecontroller.text);
                   titlecontroller.text = "";
                   datecontroller.text = "";
