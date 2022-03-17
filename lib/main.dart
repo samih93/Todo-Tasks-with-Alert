@@ -6,9 +6,19 @@ import 'package:todo_tasks_with_alert/layout/todo_layoutcontroller.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/cashhelper.dart';
 import 'package:todo_tasks_with_alert/shared/network/local/notification.dart';
 import 'package:todo_tasks_with_alert/shared/styles/thems.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  // NOTE : catch notification  with parameter while app is closed and when on press notification
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    print("message data opened " + message.data.toString());
+    //showToast(message: "on message opened", status: ToastStatus.Success);
+  });
+
   await CashHelper.init();
 
 // NOTE Notification
