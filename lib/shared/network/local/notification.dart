@@ -72,34 +72,34 @@ class NotificationApi {
         matchDateTimeComponents: DateTimeComponents.time);
   }
 
-  // NOTE push notification when a friend like my post a new post
-  static void createNotification(
-      String title, DateTime scheduleDate, String time) {
-    DioHelper.postData(url: 'https://fcm.googleapis.com/fcm/send', data: {
-      "to": "$devicetoken",
-      "notification": {
-        "body": "see details",
-        "title": " Like Your post",
-        "sound": "default"
-      },
-      "android": {
-        "priortiy": "HIGH",
-        "notification": {
-          "notification_priority": "PRIORITY_MAX",
-          "sound": "default",
-          "default_vibrate_timings": true,
-          "default_light_settings": true
-        }
-      },
-      "data": {
-        "click_action": "FLUTTER_NOTIFICATION_CLICK",
-        "id": "87",
-        "type": "order"
-      }
-    }).then((value) {
-      print("notification pushed");
-    }).catchError((error) {
-      print(error.toString());
-    });
-  }
+  // // NOTE push notification when a friend like my post a new post
+  // static void createNotification(
+  //     String title, DateTime scheduleDate, String time) {
+  //   DioHelper.postData(url: 'https://fcm.googleapis.com/fcm/send', data: {
+  //     "to": "$devicetoken",
+  //     "notification": {
+  //       "body": "see details",
+  //       "title": " Like Your post",
+  //       "sound": "default"
+  //     },
+  //     "android": {
+  //       "priortiy": "HIGH",
+  //       "notification": {
+  //         "notification_priority": "PRIORITY_MAX",
+  //         "sound": "default",
+  //         "default_vibrate_timings": true,
+  //         "default_light_settings": true
+  //       }
+  //     },
+  //     "data": {
+  //       "click_action": "FLUTTER_NOTIFICATION_CLICK",
+  //       "id": "87",
+  //       "type": "order"
+  //     }
+  //   }).then((value) {
+  //     print("notification pushed");
+  //   }).catchError((error) {
+  //     print(error.toString());
+  //   });
+  // }
 }
